@@ -899,11 +899,11 @@ searchEl.addEventListener('input', function() {
   if (!matches.length) { dropdown.style.display='none'; return; }
   dropdown.innerHTML = matches.map(c => {
     const color = c.points>=12?'#ef4444':c.points>=8?'#f97316':c.points>=5?'#f59e0b':c.points>=3?'#d97706':'#16a34a';
-    const jailTag = c.jail ? ' · <span style="color:#ef4444;font-size:0.85em">⚠️ Incarcerable</span>' : '';
+    const jailTag = c.jail ? '<span style="color:#ef4444;font-size:0.85em">⚠️ Potential jail time</span>' : '';
     return `<div class="dropdown-item" onclick="addCitation(${CITATIONS.indexOf(c)})">
       <div>
         <div class="d-name">${c.name}</div>
-        <div class="d-stat">${c.statute}${jailTag}</div>
+        ${jailTag ? `<div class="d-stat">${jailTag}</div>` : ''}
       </div>
       <span class="pts-pill" style="color:${color}">${c.points} pt${c.points!==1?'s':''}</span>
     </div>`;
