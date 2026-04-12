@@ -218,6 +218,17 @@ input:checked + .slider:before { transform: translateX(20px); }
 .reminder-success.show { display: block; }
 
 /* ── WhatsApp float ── */
+/* ── Guarantee ── */
+.guarantee-section { background: #111; padding: 40px 20px; text-align: center; }
+.guarantee-badge { display: inline-flex; flex-direction: column; align-items: center; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 3px solid #f59e0b; border-radius: 20px; padding: 30px 36px; max-width: 540px; margin: 0 auto; }
+.guarantee-badge .gb-icon { font-size: 3em; margin-bottom: 10px; }
+.guarantee-badge .gb-title { font-size: 1.3em; font-weight: 900; color: #f59e0b; margin-bottom: 12px; letter-spacing: 0.5px; }
+.guarantee-badge .gb-body { font-size: 0.92em; color: #ddd; line-height: 1.75; margin-bottom: 16px; }
+.guarantee-badge .gb-body strong { color: #fff; }
+.guarantee-badge .gb-fine { font-size: 0.75em; color: #777; line-height: 1.5; }
+.guarantee-mini { display: inline-flex; align-items: center; gap: 8px; background: rgba(245,158,11,0.12); border: 1.5px solid #f59e0b; border-radius: 50px; padding: 7px 16px; font-size: 0.8em; color: #f59e0b; font-weight: 700; margin-top: 14px; }
+
+/* ── WhatsApp float ── */
 .wa-float { position: fixed; bottom: 24px; right: 20px; z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 .wa-bubble { background: #25d366; color: #fff; border-radius: 50px; padding: 12px 18px 12px 14px; display: flex; align-items: center; gap: 10px; text-decoration: none; box-shadow: 0 4px 20px rgba(37,211,102,0.4); font-weight: 700; font-size: 0.88em; }
 .wa-bubble:hover { background: #1eb854; }
@@ -268,6 +279,7 @@ input:checked + .slider:before { transform: translateX(20px); }
     <div class="trust-item"><span class="ti">🏆</span> 500+ Tickets Dismissed</div>
     <div class="trust-item"><span class="ti">⚡</span> Results in Weeks</div>
     <div class="trust-item"><span class="ti">🚫</span> You Never Go to Court*</div>
+    <div class="trust-item"><span class="ti">💰</span> 100% Money-Back Guarantee</div>
   </div>
 </div>
 
@@ -404,6 +416,20 @@ input:checked + .slider:before { transform: translateX(20px); }
 </div>
 
 <div class="divider"></div>
+
+<!-- Guarantee -->
+<div class="guarantee-section">
+  <div class="guarantee-badge">
+    <div class="gb-icon">🏆</div>
+    <div class="gb-title">THE BEAT-TIX GUARANTEE</div>
+    <div class="gb-body">
+      We only get paid when we deliver.<br><br>
+      If we don't get you a <strong>better outcome than simply paying your ticket</strong> — fewer points, a reduced charge, or a dismissal — we'll refund your <strong>full attorney fee.</strong><br><br>
+      No questions asked. No fine print. No hassle.
+    </div>
+    <div class="gb-fine">* Applies to standard traffic cases handled under our flat-fee service. Outcome comparison is based on points and charge severity vs. paying the citation in full. Refund processed within 5 business days of request.</div>
+  </div>
+</div>
 
 <!-- Urgency Banner -->
 <div class="urgency-banner" id="urgencyBanner">
@@ -559,6 +585,7 @@ input:checked + .slider:before { transform: translateX(20px); }
         <span class="cta-feat">✓ Results in Weeks</span>
         <span class="cta-feat">✓ Payment Plans</span>
       </div>
+      <div class="guarantee-mini">🏆 100% Money-Back Guarantee — Better Results or Full Refund</div>
     </div>
 
     <button class="reset-btn" onclick="resetAll()">🔄 Start over</button>
