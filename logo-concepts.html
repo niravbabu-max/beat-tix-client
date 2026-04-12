@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAT-TIX Logo Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Bebas+Neue&family=Inter:wght@400;700;900&family=Oswald:wght@700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a1a1a; font-family: 'Inter', sans-serif; color: #fff; padding: 40px 20px; }
+h1 { text-align: center; font-size: 1.2em; color: #888; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
+.subtitle { text-align: center; color: #555; font-size: 0.85em; margin-bottom: 48px; }
+
+.concept { background: #111; border-radius: 16px; padding: 40px 24px; margin-bottom: 32px; }
+.concept-label { font-size: 0.75em; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+.concept-name { font-size: 1em; font-weight: 700; color: #aaa; margin-bottom: 24px; }
+
+.logo-row { display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 20px; }
+.logo-on-white { background: #fff; border-radius: 10px; padding: 28px 36px; display: flex; align-items: center; justify-content: center; }
+.logo-on-black { background: #0a0a0a; border-radius: 10px; padding: 28px 36px; display: flex; align-items: center; justify-content: center; border: 1px solid #222; }
+.concept-desc { font-size: 0.82em; color: #555; text-align: center; margin-top: 16px; line-height: 1.6; }
+.tag { display: inline-block; background: #222; color: #888; font-size: 0.72em; padding: 3px 10px; border-radius: 20px; margin: 3px; }
+
+/* ─── CONCEPT 1: Red Shield Badge ─── */
+.c1-logo { display: inline-flex; flex-direction: column; align-items: center; gap: 0; }
+.c1-shield {
+  position: relative;
+  width: 110px;
+  height: 130px;
+  background: linear-gradient(160deg, #e00000, #8b0000);
+  clip-path: polygon(50% 100%, 0% 60%, 0% 0%, 100% 0%, 100% 60%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding-top: 10px;
+}
+.c1-beat { font-family: 'Black Ops One', cursive; font-size: 1.5em; color: #fff; letter-spacing: 2px; line-height: 1; }
+.c1-dash { width: 40px; height: 2px; background: rgba(255,255,255,0.4); margin: 4px 0; }
+.c1-tix { font-family: 'Black Ops One', cursive; font-size: 1.1em; color: #ffcccc; letter-spacing: 3px; line-height: 1; }
+.c1-number { font-family: 'Inter', sans-serif; font-size: 0.65em; font-weight: 700; color: #cc0000; letter-spacing: 1px; margin-top: 8px; }
+.c1-number-w { color: #888; }
+
+.c1-logo-h { display: inline-flex; flex-direction: row; align-items: center; gap: 14px; }
+.c1-shield-sm {
+  width: 50px; height: 60px;
+  background: linear-gradient(160deg, #e00000, #8b0000);
+  clip-path: polygon(50% 100%, 0% 60%, 0% 0%, 100% 0%, 100% 60%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding-top: 4px; flex-shrink: 0;
+}
+.c1-sm-beat { font-family: 'Black Ops One', cursive; font-size: 0.65em; color: #fff; letter-spacing: 1px; }
+.c1-sm-tix  { font-family: 'Black Ops One', cursive; font-size: 0.5em;  color: #ffcccc; letter-spacing: 2px; }
+.c1-text-block .c1-wordmark { font-family: 'Black Ops One', cursive; font-size: 1.4em; color: #cc0000; letter-spacing: 3px; line-height: 1; }
+.c1-text-block .c1-num { font-size: 0.7em; color: #888; letter-spacing: 1px; font-weight: 600; font-family: 'Inter', sans-serif; }
+
+/* ─── CONCEPT 2: Gavel + Bold Type ─── */
+.c2-logo { display: inline-flex; align-items: center; gap: 14px; }
+.c2-icon { font-size: 2.8em; line-height: 1; }
+.c2-text { display: flex; flex-direction: column; }
+.c2-beat { font-family: 'Bebas Neue', cursive; font-size: 2.4em; color: #cc0000; letter-spacing: 4px; line-height: 0.9; }
+.c2-tix  { font-family: 'Bebas Neue', cursive; font-size: 2.4em; color: #1a1a1a; letter-spacing: 4px; line-height: 0.9; }
+.c2-tix-w  { font-family: 'Bebas Neue', cursive; font-size: 2.4em; color: #fff; letter-spacing: 4px; line-height: 0.9; }
+.c2-num { font-family: 'Inter', sans-serif; font-size: 0.65em; color: #888; letter-spacing: 1px; margin-top: 4px; font-weight: 600; }
+.c2-divider { width: 100%; height: 2px; background: #cc0000; margin: 2px 0; }
+
+/* ─── CONCEPT 3: Checkmark + Street Sign ─── */
+.c3-logo { display: inline-flex; align-items: center; gap: 12px; }
+.c3-badge { 
+  width: 56px; height: 56px; background: #cc0000; border-radius: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transform: rotate(0deg); border: 3px solid #ff4444;
+  box-shadow: 0 0 0 3px #cc0000, 0 0 0 5px rgba(204,0,0,0.2);
+}
+.c3-check { font-size: 1.6em; color: #fff; line-height: 1; }
+.c3-text { display: flex; flex-direction: column; }
+.c3-top { display: flex; align-items: baseline; gap: 3px; }
+.c3-beat { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8em; color: #cc0000; letter-spacing: 1px; line-height: 1; }
+.c3-tix  { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8em; color: #1a1a1a; letter-spacing: 1px; line-height: 1; }
+.c3-tix-w  { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8em; color: #fff; letter-spacing: 1px; line-height: 1; }
+.c3-hyphen { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8em; color: #cc0000; line-height: 1; }
+.c3-sub { font-family: 'Inter', sans-serif; font-size: 0.62em; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; font-weight: 700; }
+
+/* ─── CONCEPT 4: Speed Stripe / Motion ─── */
+.c4-logo { display: inline-block; position: relative; }
+.c4-bg { 
+  background: #cc0000;
+  padding: 12px 24px 12px 20px;
+  display: inline-flex; align-items: center; gap: 0;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 12px 50%);
+  position: relative;
+}
+.c4-word { font-family: 'Black Ops One', cursive; font-size: 1.9em; color: #fff; letter-spacing: 3px; line-height: 1; }
+.c4-wrap { display: flex; flex-direction: column; align-items: flex-start; }
+.c4-tagline { font-family: 'Inter', sans-serif; font-size: 0.62em; color: #888; letter-spacing: 3px; text-transform: uppercase; margin-top: 6px; font-weight: 700; padding-left: 4px; }
+.c4-num { font-family: 'Inter', sans-serif; font-size: 0.62em; color: #cc0000; letter-spacing: 2px; font-weight: 800; padding-left: 4px; }
+
+.c4-logo-w .c4-tagline { color: #555; }
+.c4-logo-w .c4-num { color: #cc0000; }
+
+/* ─── CONCEPT 5: Scales + Elegant ─── */
+.c5-logo { display: inline-flex; align-items: center; gap: 16px; }
+.c5-icon { font-size: 2.6em; line-height: 1; }
+.c5-right { display: flex; flex-direction: column; }
+.c5-wordmark { display: flex; align-items: baseline; gap: 0; }
+.c5-beat { font-family: 'Oswald', sans-serif; font-size: 2em; font-weight: 700; color: #cc0000; letter-spacing: 2px; }
+.c5-dash { font-family: 'Oswald', sans-serif; font-size: 2em; font-weight: 700; color: #cc0000; }
+.c5-tix  { font-family: 'Oswald', sans-serif; font-size: 2em; font-weight: 700; color: #1a1a1a; letter-spacing: 2px; }
+.c5-tix-w  { font-family: 'Oswald', sans-serif; font-size: 2em; font-weight: 700; color: #fff; letter-spacing: 2px; }
+.c5-rule { height: 2px; background: linear-gradient(90deg, #cc0000, transparent); margin: 4px 0; }
+.c5-sub { font-family: 'Inter', sans-serif; font-size: 0.62em; color: #888; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
+.c5-num { font-family: 'Inter', sans-serif; font-size: 0.65em; color: #cc0000; font-weight: 800; letter-spacing: 1px; }
+
+.note { background: #161616; border-radius: 10px; padding: 14px 18px; margin-top: 12px; font-size: 0.8em; color: #666; line-height: 1.6; }
+.note strong { color: #aaa; }
+</style>
+</head>
+<body>
+
+<h1>BEAT-TIX Logo Concepts</h1>
+<p class="subtitle">1-855-BEAT-TIX · Maryland Traffic Ticket Defense · Review all 5 options and pick your favorite</p>
+
+<!-- ═══ CONCEPT 1 ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept 1</div>
+  <div class="concept-name" style="color:#fff;">🛡️ Red Shield Badge — Authority + Trust</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">Stacked / Vertical</div>
+      <div class="logo-on-white">
+        <div class="c1-logo">
+          <div class="c1-shield">
+            <div class="c1-beat">BEAT</div>
+            <div class="c1-dash"></div>
+            <div class="c1-tix">TIX</div>
+          </div>
+          <div class="c1-number">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">Horizontal</div>
+      <div class="logo-on-white">
+        <div class="c1-logo-h">
+          <div class="c1-shield-sm">
+            <div class="c1-sm-beat">BEAT</div>
+            <div class="c1-sm-tix">TIX</div>
+          </div>
+          <div class="c1-text-block">
+            <div class="c1-wordmark">BEAT-TIX</div>
+            <div class="c1-num">1-855-232-8849</div>
+          </div>
+        </div>
+      </div>
+      <div class="logo-on-black" style="margin-top:12px;">
+        <div class="c1-logo-h">
+          <div class="c1-shield-sm">
+            <div class="c1-sm-beat">BEAT</div>
+            <div class="c1-sm-tix">TIX</div>
+          </div>
+          <div class="c1-text-block">
+            <div class="c1-wordmark">BEAT-TIX</div>
+            <div class="c1-num" style="color:#555;">1-855-232-8849</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">Shield = law, protection, authority. Clean and professional. Works well on business cards, letterhead, and car magnets.</div>
+  <div style="text-align:center;margin-top:10px;">
+    <span class="tag">Professional</span><span class="tag">Trustworthy</span><span class="tag">Bold</span><span class="tag">Versatile</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT 2 ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept 2</div>
+  <div class="concept-name" style="color:#fff;">⚖️ Gavel Stack — Classic Law Meets Modern</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white">
+        <div class="c2-logo">
+          <div class="c2-icon">⚖️</div>
+          <div class="c2-text">
+            <div class="c2-beat">BEAT</div>
+            <div class="c2-divider"></div>
+            <div class="c2-tix">TIX</div>
+            <div class="c2-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On Black</div>
+      <div class="logo-on-black">
+        <div class="c2-logo">
+          <div class="c2-icon">⚖️</div>
+          <div class="c2-text">
+            <div class="c2-beat">BEAT</div>
+            <div class="c2-divider"></div>
+            <div class="c2-tix-w">TIX</div>
+            <div class="c2-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">The scales of justice say "real attorney." The Bebas Neue font is modern and bold without being aggressive. Feels premium but approachable.</div>
+  <div style="text-align:center;margin-top:10px;">
+    <span class="tag">Premium</span><span class="tag">Approachable</span><span class="tag">Modern</span><span class="tag">Clean</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT 3 ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept 3</div>
+  <div class="concept-name" style="color:#fff;">✅ Checkmark Badge — We Win. Simple.</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white">
+        <div class="c3-logo">
+          <div class="c3-badge"><div class="c3-check">✓</div></div>
+          <div class="c3-text">
+            <div class="c3-top">
+              <span class="c3-beat">BEAT</span><span class="c3-hyphen">-</span><span class="c3-tix">TIX</span>
+            </div>
+            <div class="c3-sub">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On Black</div>
+      <div class="logo-on-black">
+        <div class="c3-logo">
+          <div class="c3-badge"><div class="c3-check">✓</div></div>
+          <div class="c3-text">
+            <div class="c3-top">
+              <span class="c3-beat">BEAT</span><span class="c3-hyphen">-</span><span class="c3-tix-w">TIX</span>
+            </div>
+            <div class="c3-sub">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">The red checkmark box immediately signals victory and results. Montserrat 900 weight is bold and modern. Great for social media, TikTok thumbnails, and vehicle wraps.</div>
+  <div style="text-align:center;margin-top:10px;">
+    <span class="tag">Wins-Focused</span><span class="tag">Social Media Ready</span><span class="tag">Energetic</span><span class="tag">Memorable</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT 4 ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept 4</div>
+  <div class="concept-name" style="color:#fff;">⚡ Speed Arrow — Fast Results, No BS</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white">
+        <div class="c4-logo c4-logo-w">
+          <div class="c4-wrap">
+            <div class="c4-bg">
+              <div class="c4-word">BEAT-TIX</div>
+            </div>
+            <div class="c4-tagline">Maryland Traffic Defense</div>
+            <div class="c4-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On Black</div>
+      <div class="logo-on-black">
+        <div class="c4-logo">
+          <div class="c4-wrap">
+            <div class="c4-bg">
+              <div class="c4-word">BEAT-TIX</div>
+            </div>
+            <div class="c4-tagline">Maryland Traffic Defense</div>
+            <div class="c4-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">The arrow/chevron shape suggests speed and forward motion. "We get you through this fast." Great for billboard and radio — instantly memorable. Less formal, more aggressive.</div>
+  <div style="text-align:center;margin-top:10px;">
+    <span class="tag">High Energy</span><span class="tag">Billboard-Ready</span><span class="tag">Direct Mail</span><span class="tag">Aggressive</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT 5 ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept 5</div>
+  <div class="concept-name" style="color:#fff;">⚖️ Scales + Gradient Line — Premium Law Firm Feel</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white">
+        <div class="c5-logo">
+          <div class="c5-icon">⚖️</div>
+          <div class="c5-right">
+            <div class="c5-wordmark">
+              <span class="c5-beat">BEAT</span><span class="c5-dash">-</span><span class="c5-tix">TIX</span>
+            </div>
+            <div class="c5-rule"></div>
+            <div class="c5-sub">Maryland Traffic Defense</div>
+            <div class="c5-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#555;margin-bottom:10px;">On Black</div>
+      <div class="logo-on-black">
+        <div class="c5-logo">
+          <div class="c5-icon">⚖️</div>
+          <div class="c5-right">
+            <div class="c5-wordmark">
+              <span class="c5-beat">BEAT</span><span class="c5-dash">-</span><span class="c5-tix-w">TIX</span>
+            </div>
+            <div class="c5-rule"></div>
+            <div class="c5-sub">Maryland Traffic Defense</div>
+            <div class="c5-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">Oswald is bold but refined — feels like a real law firm. The gradient rule adds a premium touch. Works well on the website, letterhead, and professional directories like Avvo.</div>
+  <div style="text-align:center;margin-top:10px;">
+    <span class="tag">Elegant</span><span class="tag">Law Firm</span><span class="tag">Refined</span><span class="tag">Website-Friendly</span>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Next step:</strong> Pick a concept (1–5) and I'll refine it, export it as SVG, and place it on the site. I can also combine elements across concepts — e.g. the shield from #1 with the font from #5. Just tell me what you like and don't like about each.
+</div>
+
+</body>
+</html>
