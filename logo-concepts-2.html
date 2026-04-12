@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAT-TIX Logo Concepts — Set 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Bebas+Neue&family=Inter:wght@400;700;800;900&family=Oswald:wght@700&family=Montserrat:wght@900&family=Anton&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #141414; font-family: 'Inter', sans-serif; color: #fff; padding: 40px 20px 80px; }
+h1 { text-align: center; font-size: 1.2em; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 2px; }
+.subtitle { text-align: center; color: #444; font-size: 0.82em; margin-bottom: 12px; }
+.back-link { text-align: center; margin-bottom: 44px; }
+.back-link a { color: #cc0000; font-size: 0.82em; text-decoration: none; }
+
+.concept { background: #1a1a1a; border-radius: 16px; padding: 36px 24px; margin-bottom: 28px; }
+.concept-label { font-size: 0.72em; color: #444; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+.concept-name { font-size: 1em; font-weight: 700; color: #ddd; margin-bottom: 28px; }
+.logo-row { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 20px; }
+.logo-on-white { background: #fff; border-radius: 10px; padding: 28px 36px; display: flex; align-items: center; justify-content: center; min-width: 240px; }
+.logo-on-dark { background: #0d0d0d; border-radius: 10px; padding: 28px 36px; display: flex; align-items: center; justify-content: center; border: 1px solid #222; min-width: 240px; }
+.concept-desc { font-size: 0.82em; color: #555; text-align: center; line-height: 1.7; margin-top: 16px; }
+.tag { display: inline-block; background: #222; color: #777; font-size: 0.72em; padding: 3px 10px; border-radius: 20px; margin: 3px; }
+.tags { text-align: center; margin-top: 10px; }
+
+/* ═══ CONCEPT A: STAMP ═══ */
+.ca-stamp {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 0;
+  border: 4px solid #cc0000; border-radius: 6px;
+  padding: 12px 22px;
+  position: relative;
+  transform: rotate(-3deg);
+}
+.ca-stamp::before {
+  content: ''; position: absolute; inset: 3px; border: 1.5px solid #cc0000; border-radius: 3px; opacity: 0.4;
+}
+.ca-top    { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.7em; letter-spacing: 4px; color: #cc0000; text-transform: uppercase; }
+.ca-main   { font-family: 'Anton', cursive; font-size: 2.2em; color: #cc0000; letter-spacing: 3px; line-height: 1; }
+.ca-bottom { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.68em; letter-spacing: 3px; color: #cc0000; }
+
+.ca-stamp-w .ca-top    { color: #cc0000; }
+.ca-stamp-w .ca-main   { color: #cc0000; }
+.ca-stamp-w .ca-bottom { color: #888; }
+.ca-stamp-w { border-color: #cc0000; }
+.ca-stamp-w::before { border-color: #cc0000; }
+
+.ca-clean { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.ca-clean .cc-row1 { display: flex; align-items: center; gap: 0; }
+.ca-clean .cc-beat { font-family: 'Anton', cursive; font-size: 2.4em; color: #cc0000; letter-spacing: 2px; line-height: 1; }
+.ca-clean .cc-tix  { font-family: 'Anton', cursive; font-size: 2.4em; color: #1a1a1a; letter-spacing: 2px; line-height: 1; }
+.ca-clean .cc-tix-w { font-family: 'Anton', cursive; font-size: 2.4em; color: #fff; letter-spacing: 2px; line-height: 1; }
+.ca-clean .cc-dash { font-family: 'Anton', cursive; font-size: 2.4em; color: #cc0000; line-height: 1; }
+.ca-clean .cc-sub  { font-family: 'Inter', sans-serif; font-size: 0.62em; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; }
+.ca-clean .cc-num  { font-family: 'Inter', sans-serif; font-size: 0.68em; font-weight: 800; color: #cc0000; letter-spacing: 1px; }
+
+/* ═══ CONCEPT B: NO-TICKET CIRCLE ═══ */
+.cb-logo { display: inline-flex; align-items: center; gap: 16px; }
+.cb-no {
+  position: relative; width: 60px; height: 60px;
+  border: 4px solid #cc0000; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  overflow: hidden;
+}
+.cb-ticket { font-size: 1.4em; line-height: 1; }
+.cb-slash {
+  position: absolute; width: 100%; height: 4px; background: #cc0000;
+  transform: rotate(-45deg); top: 50%; margin-top: -2px;
+}
+.cb-text { display: flex; flex-direction: column; }
+.cb-beat { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.9em; color: #cc0000; letter-spacing: 2px; line-height: 1; }
+.cb-tix  { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.9em; color: #1a1a1a; letter-spacing: 2px; line-height: 1; }
+.cb-tix-w  { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.9em; color: #fff; letter-spacing: 2px; line-height: 1; }
+.cb-dash { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.9em; color: #cc0000; line-height: 1; }
+.cb-num { font-family: 'Inter', sans-serif; font-size: 0.62em; font-weight: 700; color: #888; letter-spacing: 1.5px; margin-top: 2px; }
+
+/* ═══ CONCEPT C: LIGHTNING SPLIT ═══ */
+.cc-wrap { display: inline-flex; flex-direction: column; align-items: flex-start; }
+.cc-top-row { display: flex; align-items: center; gap: 0; }
+.cc-beat { font-family: 'Black Ops One', cursive; font-size: 2.2em; color: #1a1a1a; letter-spacing: 2px; line-height: 1; }
+.cc-beat-w { font-family: 'Black Ops One', cursive; font-size: 2.2em; color: #fff; letter-spacing: 2px; line-height: 1; }
+.cc-bolt { font-size: 1.8em; color: #cc0000; line-height: 1; margin: 0 2px; }
+.cc-tix  { font-family: 'Black Ops One', cursive; font-size: 2.2em; color: #cc0000; letter-spacing: 2px; line-height: 1; }
+.cc-bar  { height: 3px; background: linear-gradient(90deg, #cc0000 60%, transparent); margin: 3px 0; width: 100%; }
+.cc-sub  { font-family: 'Inter', sans-serif; font-size: 0.62em; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; }
+.cc-num  { font-family: 'Inter', sans-serif; font-size: 0.68em; font-weight: 800; color: #cc0000; margin-top: 2px; letter-spacing: 1px; }
+
+/* ═══ CONCEPT D: FLAG STRIPE (Maryland inspired) ═══ */
+.cd-logo { display: inline-flex; align-items: stretch; gap: 0; overflow: hidden; border-radius: 8px; }
+.cd-flag-block {
+  display: flex; flex-direction: column; width: 18px; flex-shrink: 0;
+}
+.cd-stripe { flex: 1; }
+.cd-content { background: #111; padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; }
+.cd-beat { font-family: 'Bebas Neue', cursive; font-size: 1.9em; color: #cc0000; letter-spacing: 4px; line-height: 1; }
+.cd-tix  { font-family: 'Bebas Neue', cursive; font-size: 1.9em; color: #fff; letter-spacing: 4px; line-height: 1; }
+.cd-sub  { font-family: 'Inter', sans-serif; font-size: 0.6em; font-weight: 700; letter-spacing: 2px; color: #555; text-transform: uppercase; margin-top: 4px; }
+.cd-num  { font-family: 'Inter', sans-serif; font-size: 0.65em; font-weight: 800; color: #cc0000; letter-spacing: 1px; }
+.cd-logo-w .cd-content { background: #f5f5f5; }
+.cd-logo-w .cd-tix { color: #1a1a1a; }
+
+/* ═══ CONCEPT E: KNOCKOUT PUNCH ═══ */
+.ce-wrap { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.ce-row1 { display: flex; align-items: baseline; gap: 4px; }
+.ce-beat { font-family: 'Anton', cursive; font-size: 3.2em; color: #cc0000; letter-spacing: -1px; line-height: 1; }
+.ce-tix  { font-family: 'Anton', cursive; font-size: 1.8em; color: #1a1a1a; letter-spacing: 2px; line-height: 1; }
+.ce-tix-w { font-family: 'Anton', cursive; font-size: 1.8em; color: #fff; letter-spacing: 2px; line-height: 1; }
+.ce-dash { font-family: 'Anton', cursive; font-size: 3.2em; color: #cc0000; line-height: 1; }
+.ce-tagline { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8em; letter-spacing: 4px; color: #888; text-transform: uppercase; border-top: 2px solid #cc0000; padding-top: 4px; width: 100%; }
+.ce-num { font-family: 'Inter', sans-serif; font-size: 0.65em; font-weight: 800; color: #cc0000; letter-spacing: 1px; margin-top: 2px; }
+
+/* ═══ CONCEPT F: RETRO BADGE ═══ */
+.cf-outer {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #cc0000; border-radius: 50%;
+  width: 140px; height: 140px; position: relative;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 2px #cc0000;
+}
+.cf-outer::before {
+  content: ''; position: absolute; inset: 6px;
+  border: 2px dashed rgba(255,255,255,0.3); border-radius: 50%;
+}
+.cf-inner { display: flex; flex-direction: column; align-items: center; gap: 1px; z-index: 1; }
+.cf-top-text { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.6em; letter-spacing: 3px; color: #ffcccc; text-transform: uppercase; }
+.cf-main { font-family: 'Black Ops One', cursive; font-size: 1.4em; color: #fff; letter-spacing: 2px; line-height: 1; }
+.cf-rule { width: 60px; height: 2px; background: rgba(255,255,255,0.5); margin: 2px 0; }
+.cf-sub  { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.58em; letter-spacing: 2px; color: #ffcccc; text-transform: uppercase; }
+.cf-num  { font-family: 'Inter', sans-serif; font-size: 0.5em; font-weight: 800; color: #fff; letter-spacing: 1px; margin-top: 2px; }
+
+.cf-outer-w {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border-radius: 50%;
+  width: 140px; height: 140px; position: relative;
+  border: 4px solid #cc0000;
+}
+.cf-outer-w::before {
+  content: ''; position: absolute; inset: 6px;
+  border: 2px dashed rgba(204,0,0,0.3); border-radius: 50%;
+}
+.cf-outer-w .cf-top-text { color: #cc0000; }
+.cf-outer-w .cf-main { color: #cc0000; }
+.cf-outer-w .cf-rule { background: #cc0000; }
+.cf-outer-w .cf-sub { color: #999; }
+.cf-outer-w .cf-num { color: #cc0000; }
+</style>
+</head>
+<body>
+
+<h1>BEAT-TIX Logo Concepts — Set 2</h1>
+<p class="subtitle">1-855-BEAT-TIX · 6 New Directions</p>
+<div class="back-link"><a href="logo-concepts.html">← View Set 1</a></div>
+
+<!-- ═══ CONCEPT A ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept A</div>
+  <div class="concept-name">🔖 Dismissed Stamp — Clever & Memorable</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">Stamp Version</div>
+      <div class="logo-on-white">
+        <div class="ca-stamp ca-stamp-w">
+          <div class="ca-top">Maryland Traffic Defense</div>
+          <div class="ca-main">BEAT-TIX</div>
+          <div class="ca-bottom">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">Clean Version</div>
+      <div class="logo-on-white">
+        <div class="ca-clean">
+          <div class="cc-row1">
+            <span class="cc-beat">BEAT</span><span class="cc-dash">-</span><span class="cc-tix">TIX</span>
+          </div>
+          <div class="cc-sub">Maryland Traffic Defense</div>
+          <div class="cc-num">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+      <div class="logo-on-dark" style="margin-top:10px;">
+        <div class="ca-clean">
+          <div class="cc-row1">
+            <span class="cc-beat">BEAT</span><span class="cc-dash">-</span><span class="cc-tix-w">TIX</span>
+          </div>
+          <div class="cc-sub">Maryland Traffic Defense</div>
+          <div class="cc-num">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">Stamp on Dark</div>
+      <div class="logo-on-dark">
+        <div class="ca-stamp">
+          <div class="ca-top">Maryland Traffic Defense</div>
+          <div class="ca-main">BEAT-TIX</div>
+          <div class="ca-bottom">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">The tilted stamp says "your ticket just got DISMISSED." Anton is a high-impact, recognizable font used by major brands. The clean version strips the stamp for daily use.</div>
+  <div class="tags">
+    <span class="tag">Clever</span><span class="tag">High Impact</span><span class="tag">Dual Use</span><span class="tag">Billboard</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT B ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept B</div>
+  <div class="concept-name">🚫 No-Ticket Symbol — Instantly Understood</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white">
+        <div class="cb-logo">
+          <div class="cb-no">
+            <div class="cb-ticket">🎫</div>
+            <div class="cb-slash"></div>
+          </div>
+          <div class="cb-text">
+            <div style="display:flex;align-items:baseline;">
+              <span class="cb-beat">BEAT</span><span class="cb-dash">-</span><span class="cb-tix">TIX</span>
+            </div>
+            <div class="cb-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On Dark</div>
+      <div class="logo-on-dark">
+        <div class="cb-logo">
+          <div class="cb-no">
+            <div class="cb-ticket">🎫</div>
+            <div class="cb-slash"></div>
+          </div>
+          <div class="cb-text">
+            <div style="display:flex;align-items:baseline;">
+              <span class="cb-beat">BEAT</span><span class="cb-dash">-</span><span class="cb-tix-w">TIX</span>
+            </div>
+            <div class="cb-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">Universal "no" symbol instantly communicates what you do — eliminate tickets. No explanation needed. Especially strong on vehicle magnets, TikTok, and social ads.</div>
+  <div class="tags">
+    <span class="tag">Visual</span><span class="tag">Instant Clarity</span><span class="tag">Social Media</span><span class="tag">Car Magnets</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT C ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept C</div>
+  <div class="concept-name">⚡ Lightning Split — Power & Speed</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white">
+        <div class="cc-wrap">
+          <div class="cc-top-row">
+            <span class="cc-beat">BEAT</span>
+            <span class="cc-bolt">⚡</span>
+            <span class="cc-tix">TIX</span>
+          </div>
+          <div class="cc-bar"></div>
+          <div class="cc-sub">Maryland Traffic Defense</div>
+          <div class="cc-num">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On Dark</div>
+      <div class="logo-on-dark">
+        <div class="cc-wrap">
+          <div class="cc-top-row">
+            <span class="cc-beat-w">BEAT</span>
+            <span class="cc-bolt">⚡</span>
+            <span class="cc-tix">TIX</span>
+          </div>
+          <div class="cc-bar"></div>
+          <div class="cc-sub">Maryland Traffic Defense</div>
+          <div class="cc-num">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">The lightning bolt replaces the hyphen — "BEAT⚡TIX." Fast, electric, powerful. The bolt visually suggests speed of results and the energy of fighting back. Great for digital.</div>
+  <div class="tags">
+    <span class="tag">Energetic</span><span class="tag">Modern</span><span class="tag">Digital-First</span><span class="tag">Memorable</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT D ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept D</div>
+  <div class="concept-name">🏴 Maryland Flag Stripe — Hyperlocal Pride</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On Dark</div>
+      <div class="logo-on-dark" style="padding:0;overflow:hidden;">
+        <div class="cd-logo">
+          <div class="cd-flag-block">
+            <div class="cd-stripe" style="background:#cc0000;"></div>
+            <div class="cd-stripe" style="background:#f0c040;"></div>
+            <div class="cd-stripe" style="background:#1a1a1a;"></div>
+            <div class="cd-stripe" style="background:#cc0000;"></div>
+            <div class="cd-stripe" style="background:#f0c040;"></div>
+            <div class="cd-stripe" style="background:#1a1a1a;"></div>
+          </div>
+          <div class="cd-content">
+            <div class="cd-beat">BEAT-</div>
+            <div class="cd-tix">TIX</div>
+            <div class="cd-sub">Maryland Traffic Defense</div>
+            <div class="cd-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white" style="padding:0;overflow:hidden;border-radius:10px;">
+        <div class="cd-logo cd-logo-w">
+          <div class="cd-flag-block">
+            <div class="cd-stripe" style="background:#cc0000;"></div>
+            <div class="cd-stripe" style="background:#f0c040;"></div>
+            <div class="cd-stripe" style="background:#555;"></div>
+            <div class="cd-stripe" style="background:#cc0000;"></div>
+            <div class="cd-stripe" style="background:#f0c040;"></div>
+            <div class="cd-stripe" style="background:#555;"></div>
+          </div>
+          <div class="cd-content">
+            <div class="cd-beat">BEAT-</div>
+            <div class="cd-tix">TIX</div>
+            <div class="cd-sub">Maryland Traffic Defense</div>
+            <div class="cd-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">Red, gold, and black are Maryland's colors. The flag stripe on the left says "this is a Maryland firm" without saying a word. Strong for local SEO, direct mail, and court proximity marketing.</div>
+  <div class="tags">
+    <span class="tag">Maryland-Local</span><span class="tag">Trust</span><span class="tag">Direct Mail</span><span class="tag">Distinctive</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT E ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept E</div>
+  <div class="concept-name">💥 Knockout — Big Energy, Stops the Scroll</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On White</div>
+      <div class="logo-on-white">
+        <div class="ce-wrap">
+          <div class="ce-row1">
+            <span class="ce-beat">BEAT</span><span style="font-family:'Anton';font-size:1.5em;color:#1a1a1a;padding:0 4px;">-</span><span class="ce-tix">TIX</span>
+          </div>
+          <div class="ce-tagline">Maryland Traffic Defense</div>
+          <div class="ce-num">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">On Dark</div>
+      <div class="logo-on-dark">
+        <div class="ce-wrap">
+          <div class="ce-row1">
+            <span class="ce-beat">BEAT</span><span style="font-family:'Anton';font-size:1.5em;color:#fff;padding:0 4px;">-</span><span class="ce-tix-w">TIX</span>
+          </div>
+          <div class="ce-tagline" style="border-color:#cc0000;color:#666;">Maryland Traffic Defense</div>
+          <div class="ce-num">1-855-BEAT-TIX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">"BEAT" massive, "TIX" secondary — the word BEAT dominates. Feels aggressive and confident. Great for TikTok thumbnails, paid ads, and anywhere you need to stop someone mid-scroll.</div>
+  <div class="tags">
+    <span class="tag">Scroll Stopper</span><span class="tag">TikTok Ready</span><span class="tag">Ads</span><span class="tag">Confident</span>
+  </div>
+</div>
+
+<!-- ═══ CONCEPT F ═══ -->
+<div class="concept">
+  <div class="concept-label">Concept F</div>
+  <div class="concept-name">🔴 Retro Circle Badge — Timeless & Professional</div>
+  <div class="logo-row">
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">Filled (Dark bg)</div>
+      <div class="logo-on-dark">
+        <div class="cf-outer">
+          <div class="cf-inner">
+            <div class="cf-top-text">Maryland</div>
+            <div class="cf-main">BEAT-TIX</div>
+            <div class="cf-rule"></div>
+            <div class="cf-sub">Traffic Defense</div>
+            <div class="cf-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center;font-size:0.7em;color:#444;margin-bottom:10px;">Outline (White bg)</div>
+      <div class="logo-on-white">
+        <div class="cf-outer-w">
+          <div class="cf-inner">
+            <div class="cf-top-text">Maryland</div>
+            <div class="cf-main">BEAT-TIX</div>
+            <div class="cf-rule"></div>
+            <div class="cf-sub">Traffic Defense</div>
+            <div class="cf-num">1-855-BEAT-TIX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-desc">Classic circle badge — think NFL team logo energy. Works on merch (shirts, hats), vehicle wraps, and professional signage. Timeless format that won't feel dated in 10 years.</div>
+  <div class="tags">
+    <span class="tag">Timeless</span><span class="tag">Merch-Ready</span><span class="tag">Signage</span><span class="tag">Vehicle Wrap</span>
+  </div>
+</div>
+
+<div style="background:#111;border-radius:12px;padding:16px 20px;margin-top:8px;font-size:0.82em;color:#555;line-height:1.7;">
+  <strong style="color:#888;">Next step:</strong> Tell me which concept or elements you like and I'll combine and refine them into a final logo. I can also mix — e.g., the circle badge shape from F with the lightning from C, or the stamp energy from A with the Maryland stripe from D.
+</div>
+
+</body>
+</html>
