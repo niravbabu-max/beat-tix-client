@@ -8,22 +8,60 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f8; color: #1a1a1a; min-height: 100vh; }
 
-/* ── Header ── */
-.header { background: linear-gradient(135deg, #cc0000, #8b0000); padding: 18px 20px 22px; text-align: center; }
-.header .logo { font-size: 2em; font-weight: 900; color: #fff; letter-spacing: -1px; }
-.header .logo span { color: #ffcccc; }
-.header .tagline { color: #ffcccc; font-size: 0.95em; margin-top: 4px; }
+/* ── Sticky phone bar ── */
+.sticky-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #cc0000; padding: 10px 20px; display: none; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+.sticky-bar.visible { display: flex; }
+.sticky-bar .sb-logo { font-size: 1em; font-weight: 900; color: #fff; }
+.sticky-bar .sb-phone { background: #fff; color: #cc0000; font-weight: 900; font-size: 0.9em; padding: 7px 16px; border-radius: 50px; text-decoration: none; }
 
-/* ── Hero ── */
-.hero { background: #111; color: #fff; padding: 40px 20px 36px; text-align: center; }
-.hero h1 { font-size: 1.9em; font-weight: 900; line-height: 1.2; max-width: 620px; margin: 0 auto 14px; }
-.hero h1 span { color: #ff4444; }
-.hero p { color: #aaa; font-size: 0.95em; max-width: 520px; margin: 0 auto 22px; line-height: 1.65; }
-.hero-cta { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+/* ── Header ── */
+.header { background: linear-gradient(135deg, #cc0000, #8b0000); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.header .logo { font-size: 1.6em; font-weight: 900; color: #fff; letter-spacing: -1px; }
+.header .logo span { color: #ffcccc; }
+.header .header-phone { color: #fff; font-size: 0.88em; font-weight: 700; text-decoration: none; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 50px; }
+.header .header-phone:hover { background: rgba(255,255,255,0.25); }
+
+/* ── Hero split layout ── */
+.hero-split { background: #111; color: #fff; padding: 40px 24px; }
+.hero-inner { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 36px; align-items: center; }
+.hero-left h1 { font-size: 2em; font-weight: 900; line-height: 1.2; margin-bottom: 16px; }
+.hero-left h1 span { color: #ff4444; }
+.hero-left .hero-sub { color: #aaa; font-size: 0.92em; line-height: 1.7; margin-bottom: 20px; }
+.hero-bullets { list-style: none; margin-bottom: 22px; display: flex; flex-direction: column; gap: 9px; }
+.hero-bullets li { display: flex; align-items: center; gap: 10px; font-size: 0.9em; color: #ddd; }
+.hero-bullets .hb-icon { color: #22c55e; font-size: 1em; flex-shrink: 0; }
+.hero-stars { display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #aaa; }
+.hero-stars .star { color: #f59e0b; font-size: 1em; }
+.hero-phone { display: inline-flex; align-items: center; gap: 10px; background: #cc0000; color: #fff; font-size: 1.05em; font-weight: 800; padding: 13px 24px; border-radius: 50px; text-decoration: none; margin-top: 18px; }
+.hero-phone:hover { background: #aa0000; }
+
+/* ── Inline hero form ── */
+.hero-form { background: #fff; border-radius: 16px; padding: 24px 20px; color: #1a1a1a; box-shadow: 0 8px 40px rgba(0,0,0,0.4); }
+.hero-form h3 { font-size: 1em; font-weight: 800; color: #1a1a1a; margin-bottom: 4px; }
+.hero-form .hf-sub { font-size: 0.78em; color: #888; margin-bottom: 16px; }
+.hero-form .hf-field { margin-bottom: 12px; }
+.hero-form .hf-field label { display: block; font-size: 0.72em; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600; }
+.hero-form .hf-field input, .hero-form .hf-field select { width: 100%; background: #f5f5f5; border: 1.5px solid #ddd; border-radius: 8px; padding: 11px 12px; font-size: 0.9em; color: #1a1a1a; outline: none; font-family: inherit; }
+.hero-form .hf-field input:focus, .hero-form .hf-field select:focus { border-color: #cc0000; background: #fff; }
+.hero-form .hf-submit { width: 100%; background: #cc0000; color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 1em; font-weight: 800; cursor: pointer; margin-top: 4px; }
+.hero-form .hf-submit:hover { background: #aa0000; }
+.hero-form .hf-guarantee { display: flex; align-items: center; gap: 6px; font-size: 0.72em; color: #888; margin-top: 10px; justify-content: center; }
+.hero-form-success { display: none; text-align: center; padding: 20px 10px; }
+.hero-form-success.show { display: block; }
+.hero-form-success .hfs-icon { font-size: 2.5em; margin-bottom: 8px; }
+.hero-form-success h3 { font-size: 1em; font-weight: 800; color: #16a34a; margin-bottom: 6px; }
+.hero-form-success p { font-size: 0.82em; color: #555; line-height: 1.6; }
+
 .btn-call { display: inline-block; background: #cc0000; color: #fff; font-size: 1.1em; font-weight: 800; padding: 14px 28px; border-radius: 50px; text-decoration: none; }
 .btn-call:hover { background: #aa0000; }
 .btn-calc { display: inline-block; background: transparent; border: 2px solid #555; color: #ccc; font-size: 0.9em; font-weight: 600; padding: 12px 22px; border-radius: 50px; cursor: pointer; text-decoration: none; }
 .btn-calc:hover { border-color: #aaa; color: #fff; }
+
+@media (max-width: 700px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-form { margin-top: 0; }
+  .hero-left h1 { font-size: 1.6em; }
+}
 
 /* ── Trust bar ── */
 .trust-bar { background: #fff; border-bottom: 1px solid #eee; padding: 16px 20px; }
@@ -255,19 +293,76 @@ input:checked + .slider:before { transform: translateX(20px); }
 </head>
 <body>
 
+<!-- Sticky phone bar (appears on scroll) -->
+<div class="sticky-bar" id="stickyBar">
+  <span class="sb-logo">⚖️ BEAT-TIX</span>
+  <a href="tel:18448232849" class="sb-phone">📞 1-844-BEAT-TIX</a>
+</div>
+
 <!-- Header -->
 <div class="header">
   <div class="logo">⚖️ BEAT<span>-TIX</span></div>
-  <div class="tagline">Maryland's Traffic Ticket Defense Team</div>
+  <a href="tel:18448232849" class="header-phone">📞 1-844-232-8849</a>
 </div>
 
-<!-- Hero -->
-<div class="hero">
-  <h1>That ticket costs more than <span>you think.</span></h1>
-  <p>See the true cost of your ticket — fines, insurance hikes, and points — then decide if fighting it makes sense. Spoiler: it almost always does.</p>
-  <div class="hero-cta">
-    <a href="tel:18448232849" class="btn-call">📞 Call 1-844-BEAT-TIX</a>
-    <a href="#calculator" class="btn-calc">Calculate My Cost ↓</a>
+<!-- Hero Split -->
+<div class="hero-split" id="heroTop">
+  <div class="hero-inner">
+    <!-- Left: headline + bullets -->
+    <div class="hero-left">
+      <h1>That ticket is going to cost you a lot more than <span>you think.</span></h1>
+      <ul class="hero-bullets">
+        <li><span class="hb-icon">✓</span> Zero points on your license — we fight to keep your record clean</li>
+        <li><span class="hb-icon">✓</span> No insurance hike — a conviction can cost you $1,500+ over 3 years</li>
+        <li><span class="hb-icon">✓</span> You never go to court — we handle everything for you*</li>
+        <li><span class="hb-icon">✓</span> One flat fee — no surprises, no hourly billing</li>
+        <li><span class="hb-icon">✓</span> 100% money-back guarantee — better results or full refund</li>
+      </ul>
+      <div class="hero-stars">
+        <span class="star">★★★★★</span>
+        <span>4.9 / 5 — 200+ Maryland clients</span>
+      </div>
+      <a href="tel:18448232849" class="hero-phone">📞 Call 1-844-BEAT-TIX</a>
+    </div>
+    <!-- Right: lead form -->
+    <div class="hero-form" id="heroFormWrap">
+      <div id="heroFormInner">
+        <h3>Get Your Free Quote Now</h3>
+        <p class="hf-sub">Tell us your ticket — we'll call you back within the hour.</p>
+        <div class="hf-field">
+          <label>Your Name *</label>
+          <input type="text" id="hf_name" placeholder="First name">
+        </div>
+        <div class="hf-field">
+          <label>Phone Number *</label>
+          <input type="tel" id="hf_phone" placeholder="(410) 555-0100">
+        </div>
+        <div class="hf-field">
+          <label>Type of Charge *</label>
+          <select id="hf_type">
+            <option value="">— Select your violation —</option>
+            <option>Speeding (1–15 mph over)</option>
+            <option>Speeding (16–25 mph over)</option>
+            <option>Speeding (26+ mph over)</option>
+            <option>Reckless / Aggressive Driving</option>
+            <option>Red Light / Stop Sign</option>
+            <option>Cell Phone / Texting</option>
+            <option>Suspended / Revoked License</option>
+            <option>No License / Expired License</option>
+            <option>DUI / DWI</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <button class="hf-submit" onclick="submitHeroForm()">Get My Free Quote →</button>
+        <div class="hf-guarantee">🏆 100% money-back guarantee · No obligation</div>
+      </div>
+      <div class="hero-form-success" id="heroFormSuccess">
+        <div class="hfs-icon">✅</div>
+        <h3>We'll call you shortly!</h3>
+        <p>One of our team will reach out within the hour with your quote and options. No pressure.</p>
+        <a href="#calculator" class="btn-calc" style="color:#555;border-color:#ccc;margin-top:12px;display:inline-block;">See your full cost breakdown ↓</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -971,6 +1066,29 @@ function quizRestart() {
   ['qs2','qs3'].forEach(id => document.getElementById(id).classList.remove('active'));
   document.getElementById('qs1').classList.add('active');
   document.getElementById('quizTitle').textContent = 'Answer 3 quick questions to find out your risk level';
+}
+
+// ── STICKY BAR ────────────────────────────────────────────────────────────────
+window.addEventListener('scroll', function() {
+  const hero = document.getElementById('heroTop');
+  const bar = document.getElementById('stickyBar');
+  if (window.scrollY > (hero ? hero.offsetHeight : 300)) {
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+});
+
+// ── HERO FORM ─────────────────────────────────────────────────────────────────
+function submitHeroForm() {
+  const name = document.getElementById('hf_name').value.trim();
+  const phone = document.getElementById('hf_phone').value.trim();
+  const type = document.getElementById('hf_type').value;
+  if (!name || !phone || !type) { alert('Please fill in your name, phone number, and violation type.'); return; }
+  // TODO: POST to GHL webhook
+  // fetch('YOUR_GHL_WEBHOOK_URL', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, phone, violationType: type, source:'hero_form'}) });
+  document.getElementById('heroFormInner').style.display = 'none';
+  document.getElementById('heroFormSuccess').classList.add('show');
 }
 
 // ── LEAD FORM ─────────────────────────────────────────────────────────────────
