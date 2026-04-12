@@ -358,7 +358,7 @@ input:checked + .slider:before { transform: translateX(20px); }
     <div class="hero-form" id="heroFormWrap">
       <div id="heroFormInner">
         <h3>Tell Us About Your Ticket</h3>
-        <p class="hf-sub">Fill this out, then <a href="#calculator" style="color:#cc0000;font-weight:700;text-decoration:none;">scroll down to use the calculator ↓</a> and see exactly what your ticket is costing you. Once you've seen your quote, hit submit below and someone will reach out with next steps.</p>
+        <p class="hf-sub">You've got two options — your choice:<br><strong style="color:#1a1a1a;">① Use the calculator</strong> — fill this out, <a href="#calculator" style="color:#cc0000;font-weight:700;text-decoration:none;">scroll down ↓</a>, get your own quote, then hit submit when you're ready.<br><strong style="color:#1a1a1a;">② Just call us</strong> — we'll walk through your ticket and give you a quote right over the phone. No forms needed.</p>
         <div class="hf-field">
           <label>Your Name *</label>
           <input type="text" id="hf_name" placeholder="First name">
@@ -384,6 +384,12 @@ input:checked + .slider:before { transform: translateX(20px); }
           </select>
         </div>
         <button class="hf-submit" onclick="submitHeroForm()">Submit — Someone Will Be in Touch →</button>
+        <div style="display:flex;align-items:center;gap:10px;margin:12px 0 8px;">
+          <div style="flex:1;height:1px;background:#e5e5e5;"></div>
+          <span style="font-size:0.72em;color:#aaa;font-weight:600;">OR</span>
+          <div style="flex:1;height:1px;background:#e5e5e5;"></div>
+        </div>
+        <a href="tel:18558232849" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#f5f5f5;border:1.5px solid #ddd;border-radius:10px;padding:12px;font-size:0.9em;font-weight:800;color:#1a1a1a;text-decoration:none;">📞 Call 1-855-BEAT-TIX for a quote</a>
         <div class="hf-guarantee">🏆 100% money-back guarantee · No obligation</div>
       </div>
       <div class="hero-form-success" id="heroFormSuccess">
