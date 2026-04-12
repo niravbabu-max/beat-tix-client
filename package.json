@@ -1,0 +1,10 @@
+{
+  "name": "beat-tix-client",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx serve . -p ${PORT:-3000} -s"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}
