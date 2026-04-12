@@ -551,6 +551,10 @@ input:checked + .slider:before { transform: translateX(20px); }
         </div>
       </div>
       <div class="vs-savings" id="vsSavings"></div>
+      <button id="hireNowBtnVs" onclick="openCheckout()" style="display:none;width:100%;margin-top:14px;background:#16a34a;color:#fff;border:none;border-radius:10px;padding:14px;font-size:0.95em;font-weight:800;cursor:pointer;letter-spacing:0.3px;">
+        ✅ Hire Us Now — Pay Online
+        <span style="display:block;font-size:0.72em;color:#bbf7d0;font-weight:400;margin-top:3px;">Skip the phone call · Flat fee · Takes 3 minutes</span>
+      </button>
     </div>
 
     <div class="impact-grid">
@@ -1111,15 +1115,21 @@ function updateResults() {
   window._currentFee = attyFee;
   window._currentCharges = [...addedCitations];
 
-  // Show "Hire Us Now" button only for standard billable cases
+  // Show "Hire Us Now" buttons only for standard billable cases
   // Hide for: serious charges (DUI etc), pure consult-only, or no fee
   const showHireBtn = attyFee > 0 && !hasSerious && !(hasConsult && billable.length === 0);
+  const hireLabel = `✅ Hire Us Now — Pay $${attyFee.toLocaleString()} Online<span class="hire-btn-sub">Skip the phone call · Flat fee · Takes 3 minutes</span>`;
+
   const hireBtn = document.getElementById('hireNowBtn');
   if (hireBtn) {
     hireBtn.style.display = showHireBtn ? 'block' : 'none';
-    if (showHireBtn) {
-      hireBtn.innerHTML = `✅ Hire Us Now — Pay $${attyFee.toLocaleString()} Online<span class="hire-btn-sub">Skip the phone call · Flat fee · Takes 3 minutes</span>`;
-    }
+    if (showHireBtn) hireBtn.innerHTML = hireLabel;
+  }
+
+  const hireBtnVs = document.getElementById('hireNowBtnVs');
+  if (hireBtnVs) {
+    hireBtnVs.style.display = showHireBtn ? 'block' : 'none';
+    if (showHireBtn) hireBtnVs.innerHTML = `✅ Hire Us Now — Pay $${attyFee.toLocaleString()} Online<span style="display:block;font-size:0.72em;color:#bbf7d0;font-weight:400;margin-top:3px;">Skip the phone call · Flat fee · Takes 3 minutes</span>`;
   }
 }
 
@@ -1132,6 +1142,8 @@ function resetAll() {
   document.getElementById('urgencyBanner').classList.remove('show');
   const hireBtn = document.getElementById('hireNowBtn');
   if (hireBtn) hireBtn.style.display = 'none';
+  const hireBtnVs = document.getElementById('hireNowBtnVs');
+  if (hireBtnVs) hireBtnVs.style.display = 'none';
   window._currentFee = 0;
   window._currentCharges = [];
 }
