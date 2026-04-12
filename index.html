@@ -313,6 +313,57 @@ input:checked + .slider:before { transform: translateX(20px); }
   .hero h1 { font-size: 1.5em; }
   .cta-phone { font-size: 1.1em; padding: 12px 20px; }
 }
+
+/* ── Hire Now Button ── */
+.hire-btn { width:100%; background:#16a34a; color:#fff; border:none; border-radius:12px; padding:16px; font-size:1.05em; font-weight:800; cursor:pointer; margin-bottom:12px; display:none; letter-spacing:0.3px; }
+.hire-btn:hover { background:#15803d; }
+.hire-btn-sub { font-size:0.72em; color:#bbf7d0; display:block; font-weight:400; margin-top:3px; }
+
+/* ── Checkout Modal ── */
+.co-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9000; display:none; align-items:flex-start; justify-content:center; padding:20px 16px; overflow-y:auto; }
+.co-overlay.open { display:flex; }
+.co-modal { background:#fff; border-radius:20px; width:100%; max-width:540px; margin:auto; box-shadow:0 24px 80px rgba(0,0,0,0.5); }
+.co-header { background:#1a1a1a; color:#fff; padding:18px 22px; border-radius:20px 20px 0 0; display:flex; justify-content:space-between; align-items:center; }
+.co-header h2 { font-size:0.95em; font-weight:800; margin:0; }
+.co-header-fee { font-size:1.3em; font-weight:900; color:#4ade80; }
+.co-close { background:none; border:none; color:#fff; font-size:1.4em; cursor:pointer; line-height:1; padding:0 2px; }
+.co-tabs { display:flex; border-bottom:1px solid #eee; }
+.co-tab { flex:1; text-align:center; padding:11px 6px; font-size:0.68em; font-weight:700; color:#bbb; border-bottom:3px solid transparent; text-transform:uppercase; letter-spacing:0.5px; }
+.co-tab.active { color:#cc0000; border-bottom-color:#cc0000; }
+.co-tab.done { color:#16a34a; border-bottom-color:#16a34a; }
+.co-body { padding:22px; }
+.co-step { display:none; }
+.co-step.active { display:block; }
+.co-field { margin-bottom:13px; }
+.co-field label { display:block; font-size:0.7em; color:#666; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; font-weight:700; }
+.co-field input, .co-field select { width:100%; background:#f5f5f5; border:1.5px solid #ddd; border-radius:8px; padding:11px 12px; font-size:0.88em; color:#1a1a1a; outline:none; font-family:inherit; box-sizing:border-box; }
+.co-field input:focus, .co-field select:focus { border-color:#cc0000; background:#fff; }
+.co-2col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.co-btn { width:100%; background:#cc0000; color:#fff; border:none; border-radius:10px; padding:14px; font-size:0.95em; font-weight:800; cursor:pointer; margin-top:6px; }
+.co-btn:hover { background:#aa0000; }
+.co-btn-back { background:#f5f5f5; color:#555; border:1.5px solid #ddd; margin-top:10px; }
+.co-btn-back:hover { background:#eee; }
+.co-agreement-box { background:#f8f8f8; border:1px solid #e5e5e5; border-radius:10px; padding:16px; font-size:0.78em; color:#444; line-height:1.75; margin-bottom:14px; max-height:200px; overflow-y:auto; }
+.co-agreement-box h4 { font-size:0.95em; font-weight:800; color:#1a1a1a; margin-bottom:10px; text-align:center; }
+.co-agreement-box p { margin-bottom:8px; }
+.co-sign-row { display:flex; align-items:flex-start; gap:10px; margin-bottom:16px; font-size:0.83em; color:#333; line-height:1.5; }
+.co-sign-row input[type=checkbox] { width:18px; height:18px; accent-color:#cc0000; flex-shrink:0; margin-top:2px; }
+.co-sig-field { background:#f5f5f5; border:1.5px dashed #cc0000; border-radius:8px; padding:11px 14px; font-size:0.88em; color:#1a1a1a; font-style:italic; margin-bottom:14px; width:100%; box-sizing:border-box; }
+.co-sig-field::placeholder { color:#bbb; }
+.co-pay-box { text-align:center; padding:8px 0 16px; }
+.co-pay-amount { font-size:2.5em; font-weight:900; color:#cc0000; line-height:1; margin-bottom:4px; }
+.co-pay-label { font-size:0.8em; color:#888; margin-bottom:22px; }
+.co-pay-main { display:block; background:#cc0000; color:#fff; font-size:1.1em; font-weight:800; padding:16px 24px; border-radius:12px; text-decoration:none; margin-bottom:10px; }
+.co-pay-main:hover { background:#aa0000; }
+.co-pay-divider { display:flex; align-items:center; gap:10px; margin:14px 0; }
+.co-pay-divider span { font-size:0.72em; color:#bbb; font-weight:600; }
+.co-pay-divider div { flex:1; height:1px; background:#eee; }
+.co-pay-call { display:block; background:#f5f5f5; border:1.5px solid #ddd; color:#1a1a1a; font-size:0.9em; font-weight:800; padding:13px 24px; border-radius:10px; text-decoration:none; }
+.co-pay-call:hover { background:#eee; }
+.co-pay-secure { font-size:0.7em; color:#aaa; margin-top:14px; line-height:1.6; }
+.co-step-label { font-size:0.82em; font-weight:700; color:#555; margin-bottom:14px; }
+.co-charges-preview { background:#f8f8f8; border-radius:8px; padding:10px 14px; font-size:0.8em; color:#555; margin-bottom:14px; line-height:1.6; }
+@media(max-width:480px) { .co-2col { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -559,7 +610,11 @@ input:checked + .slider:before { transform: translateX(20px); }
 
     <div class="cta-block">
       <h2>Ready to Fight This?</h2>
-      <p>Flat fee. No court appearance. No points on your license.<br>Call now — most cases are handled in weeks.</p>
+      <p>Flat fee. No court appearance. No points on your license.<br>Hire us online right now — or call if you'd prefer to talk first.</p>
+      <button class="hire-btn" id="hireNowBtn" onclick="openCheckout()">
+        ✅ Hire Us Now — Pay Online
+        <span class="hire-btn-sub">Skip the phone call · Flat fee · Takes 3 minutes</span>
+      </button>
       <a href="tel:18558232849" class="cta-phone">1-855-BEAT-TIX</a>
       <div class="cta-sub">(1-855-232-8849) · Mon–Sat 8am–8pm</div>
       <div class="cta-features">
@@ -1050,6 +1105,21 @@ function updateResults() {
     <div class="fin-item"><div class="fi-name">Afterpay</div><div class="fi-terms">4 biweekly payments</div><div class="fi-mo">${fmt(m4)}/2wks</div></div>
     <div class="fin-item"><div class="fi-name">Wisetack</div><div class="fi-terms">Up to 12 months</div><div class="fi-mo">${fmt(m12)}/mo</div></div>
   `;
+
+  // Track current fee + charges globally for checkout modal
+  window._currentFee = attyFee;
+  window._currentCharges = [...addedCitations];
+
+  // Show "Hire Us Now" button only for standard billable cases
+  // Hide for: serious charges (DUI etc), pure consult-only, or no fee
+  const showHireBtn = attyFee > 0 && !hasSerious && !(hasConsult && billable.length === 0);
+  const hireBtn = document.getElementById('hireNowBtn');
+  if (hireBtn) {
+    hireBtn.style.display = showHireBtn ? 'block' : 'none';
+    if (showHireBtn) {
+      hireBtn.innerHTML = `✅ Hire Us Now — Pay $${attyFee.toLocaleString()} Online<span class="hire-btn-sub">Skip the phone call · Flat fee · Takes 3 minutes</span>`;
+    }
+  }
 }
 
 function resetAll() {
@@ -1059,6 +1129,10 @@ function resetAll() {
   renderCitations();
   document.getElementById('results').classList.remove('visible');
   document.getElementById('urgencyBanner').classList.remove('show');
+  const hireBtn = document.getElementById('hireNowBtn');
+  if (hireBtn) hireBtn.style.display = 'none';
+  window._currentFee = 0;
+  window._currentCharges = [];
 }
 
 // ── QUIZ ──────────────────────────────────────────────────────────────────────
@@ -1149,6 +1223,220 @@ function submitReminder() {
   // TODO: connect to SMS reminder service / GHL workflow
   document.getElementById('reminderSuccess').classList.add('show');
 }
+
+// ── CHECKOUT FLOW ─────────────────────────────────────────────────────────────
+let checkoutFee = 0;
+let checkoutCharges = [];
+let checkoutStep = 1;
+
+function openCheckout() {
+  checkoutFee = window._currentFee || 0;
+  checkoutCharges = window._currentCharges || [];
+  checkoutStep = 1;
+
+  // Pre-fill court date from calculator if set
+  const calcDate = document.getElementById('courtDate').value;
+  if (calcDate) document.getElementById('co_courtDate').value = calcDate;
+
+  // Pre-fill charges preview
+  const chargeNames = checkoutCharges.map(c => c.name).join(', ') || 'Traffic citation(s)';
+  document.getElementById('co_chargesPreview').textContent = '📋 Charges: ' + chargeNames;
+  document.getElementById('co_chargesPreview2').textContent = '📋 Charges: ' + chargeNames;
+
+  // Set fee display
+  document.getElementById('co_headerFee').textContent = '$' + checkoutFee.toLocaleString();
+  document.getElementById('co_payAmount').textContent = '$' + checkoutFee.toLocaleString();
+
+  // Build engagement letter
+  buildAgreementText();
+
+  // Reset tabs and steps
+  setCoStep(1);
+
+  document.getElementById('coOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCheckout() {
+  document.getElementById('coOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function setCoStep(n) {
+  checkoutStep = n;
+  [1,2,3].forEach(i => {
+    document.getElementById('co_step' + i).classList.toggle('active', i === n);
+    const tab = document.getElementById('co_tab' + i);
+    tab.classList.toggle('active', i === n);
+    tab.classList.toggle('done', i < n);
+  });
+}
+
+function coStep1Next() {
+  const name = document.getElementById('co_name').value.trim();
+  const phone = document.getElementById('co_phone').value.trim();
+  const email = document.getElementById('co_email').value.trim();
+  const citation = document.getElementById('co_citation').value.trim();
+  const county = document.getElementById('co_county').value;
+  const courtDate = document.getElementById('co_courtDate').value;
+  if (!name || !phone || !email || !county || !courtDate) {
+    alert('Please fill in all required fields before continuing.');
+    return;
+  }
+  // Rebuild agreement with filled-in details
+  buildAgreementText();
+  setCoStep(2);
+}
+
+function coStep2Next() {
+  const agreed = document.getElementById('co_agree').checked;
+  const sig = document.getElementById('co_sig').value.trim();
+  if (!agreed) { alert('Please check the box to agree to the fee agreement.'); return; }
+  if (!sig) { alert('Please type your full name as your electronic signature.'); return; }
+  setCoStep(3);
+}
+
+function buildAgreementText() {
+  const name = document.getElementById('co_name').value.trim() || '[Client Name]';
+  const county = document.getElementById('co_county').value || '[County]';
+  const courtDate = document.getElementById('co_courtDate').value;
+  const dateStr = courtDate ? new Date(courtDate + 'T12:00:00').toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) : '[Court Date]';
+  const chargeNames = checkoutCharges.map(c => c.name).join('; ') || 'traffic citation(s)';
+  const fee = '$' + checkoutFee.toLocaleString();
+  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+
+  document.getElementById('co_agreementText').innerHTML = `
+    <h4>FEE AGREEMENT &amp; ENGAGEMENT LETTER</h4>
+    <p><strong>Date:</strong> ${today}</p>
+    <p><strong>Client:</strong> ${name}<br>
+    <strong>Attorney / Firm:</strong> Innovate Law Firm LLC, Nirav Babu, Esq., 1401 Madison Ave Suite D, Baltimore, MD 21217</p>
+    <p><strong>1. Scope of Representation.</strong> The Firm agrees to represent Client in connection with the following traffic citation(s): <em>${chargeNames}</em>, in ${county} County, Maryland, with a court date of <em>${dateStr}</em>. Representation includes filing required notices of appearance, negotiating with the State's Attorney or citing officer, and appearing in court on Client's behalf. Client is not required to appear in court.</p>
+    <p><strong>2. Flat Fee.</strong> The total fee for this representation is <strong>${fee}</strong>, due upon signing this agreement. This is a flat fee — no additional hourly charges will be billed for the work described above.</p>
+    <p><strong>3. Money-Back Guarantee.</strong> If the Firm does not achieve a better outcome than simply paying the ticket (i.e., a reduction of points, a reduced charge, or a dismissal), the Firm will refund the full fee. No questions asked.</p>
+    <p><strong>4. No Guarantee of Outcome.</strong> While the Firm will pursue the best possible result, no attorney can guarantee a specific outcome. The guarantee in Section 3 is limited to a refund of fees paid.</p>
+    <p><strong>5. Client Responsibilities.</strong> Client agrees to provide accurate information about the citation(s), notify the Firm of any changes to the court date, and remain reachable by phone or email.</p>
+    <p><strong>6. Governing Law.</strong> This agreement is governed by the laws of the State of Maryland and the Maryland Rules of Professional Conduct.</p>
+    <p style="margin-top:12px;font-size:0.9em;color:#888;">By checking the box and typing your name below, you agree to the terms of this engagement.</p>
+  `;
+}
+
+function coOpenLawPay() {
+  // TODO: Replace YOUR_LAWPAY_PAGE_URL with your LawPay payment page link
+  // Example: https://secure.lawpay.com/pages/innovatelawfirm/operating
+  const lawPayUrl = 'YOUR_LAWPAY_PAGE_URL';
+  if (lawPayUrl === 'YOUR_LAWPAY_PAGE_URL') {
+    alert('Online payment is coming soon. Please call 1-855-BEAT-TIX to complete your payment over the phone.');
+    return;
+  }
+  window.open(lawPayUrl + '?amount=' + checkoutFee + '&memo=' + encodeURIComponent(checkoutCharges.map(c=>c.name).join(', ')), '_blank');
+}
 </script>
+
+<!-- ── Checkout Modal ── -->
+<div class="co-overlay" id="coOverlay" onclick="if(event.target===this)closeCheckout()">
+  <div class="co-modal">
+
+    <div class="co-header">
+      <div>
+        <h2>Hire Us — Pay Online</h2>
+        <div style="font-size:0.75em;color:#aaa;margin-top:2px;">Secure · Takes 3 minutes · No court appearance needed</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="co-header-fee" id="co_headerFee">—</div>
+        <button class="co-close" onclick="closeCheckout()">✕</button>
+      </div>
+    </div>
+
+    <div class="co-tabs">
+      <div class="co-tab active" id="co_tab1">① Your Info</div>
+      <div class="co-tab" id="co_tab2">② Agreement</div>
+      <div class="co-tab" id="co_tab3">③ Payment</div>
+    </div>
+
+    <!-- Step 1: Intake -->
+    <div class="co-body">
+      <div class="co-step active" id="co_step1">
+        <div class="co-step-label">Step 1 of 3 — Tell us about yourself</div>
+        <div class="co-charges-preview" id="co_chargesPreview"></div>
+        <div class="co-2col">
+          <div class="co-field">
+            <label>First &amp; Last Name *</label>
+            <input type="text" id="co_name" placeholder="John Smith">
+          </div>
+          <div class="co-field">
+            <label>Phone Number *</label>
+            <input type="tel" id="co_phone" placeholder="(410) 555-0100">
+          </div>
+        </div>
+        <div class="co-field">
+          <label>Email Address *</label>
+          <input type="email" id="co_email" placeholder="you@email.com">
+        </div>
+        <div class="co-field">
+          <label>Citation / Ticket Number <span style="font-weight:400;text-transform:none;color:#aaa;">(from your ticket — optional)</span></label>
+          <input type="text" id="co_citation" placeholder="e.g. 0T00123456">
+        </div>
+        <div class="co-2col">
+          <div class="co-field">
+            <label>County *</label>
+            <select id="co_county">
+              <option value="">— Select county —</option>
+              <option>Allegany</option><option>Anne Arundel</option><option>Baltimore City</option>
+              <option>Baltimore County</option><option>Calvert</option><option>Caroline</option>
+              <option>Carroll</option><option>Cecil</option><option>Charles</option>
+              <option>Dorchester</option><option>Frederick</option><option>Garrett</option>
+              <option>Harford</option><option>Howard</option><option>Kent</option>
+              <option>Montgomery</option><option>Prince George's</option><option>Queen Anne's</option>
+              <option>Somerset</option><option>St. Mary's</option><option>Talbot</option>
+              <option>Washington</option><option>Wicomico</option><option>Worcester</option>
+            </select>
+          </div>
+          <div class="co-field">
+            <label>Court Date *</label>
+            <input type="date" id="co_courtDate">
+          </div>
+        </div>
+        <button class="co-btn" onclick="coStep1Next()">Continue to Agreement →</button>
+      </div>
+
+      <!-- Step 2: Fee Agreement -->
+      <div class="co-step" id="co_step2">
+        <div class="co-step-label">Step 2 of 3 — Review and sign your fee agreement</div>
+        <div class="co-charges-preview" id="co_chargesPreview2"></div>
+        <div class="co-agreement-box" id="co_agreementText"></div>
+        <div class="co-sign-row">
+          <input type="checkbox" id="co_agree">
+          <label for="co_agree">I have read and agree to the Fee Agreement &amp; Engagement Letter above. I understand this is a legally binding contract.</label>
+        </div>
+        <div class="co-field">
+          <label>Type your full name as your electronic signature *</label>
+          <input type="text" class="co-sig-field" id="co_sig" placeholder="John Smith">
+        </div>
+        <button class="co-btn" onclick="coStep2Next()">Agree &amp; Continue to Payment →</button>
+        <button class="co-btn co-btn-back" onclick="setCoStep(1)">← Back</button>
+      </div>
+
+      <!-- Step 3: Payment -->
+      <div class="co-step" id="co_step3">
+        <div class="co-step-label">Step 3 of 3 — Complete your payment</div>
+        <div class="co-pay-box">
+          <div class="co-pay-amount" id="co_payAmount">—</div>
+          <div class="co-pay-label">Flat fee — one payment, no surprises</div>
+          <a href="#" class="co-pay-main" onclick="event.preventDefault();coOpenLawPay()">🔒 Pay Securely via LawPay →</a>
+          <div style="font-size:0.75em;color:#888;margin-bottom:18px;">Credit card · Debit card · ACH bank transfer</div>
+          <div class="co-pay-divider"><div></div><span>OR</span><div></div></div>
+          <a href="tel:18558232849" class="co-pay-call">📞 Call to Pay — 1-855-BEAT-TIX</a>
+          <div class="co-pay-secure">
+            🔒 Payment processed by LawPay — the attorney payment platform trusted by 50,000+ law firms.<br>
+            Your card info is never stored on our servers.<br><br>
+            🏆 100% money-back guarantee — better results or full refund.
+          </div>
+        </div>
+        <button class="co-btn co-btn-back" onclick="setCoStep(2)" style="margin-top:10px;">← Back</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 </body>
 </html>
