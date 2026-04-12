@@ -3,10 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BEAT-TIX — Maryland Traffic Ticket Defense</title>
+<title>BEAT⚡TIX — Maryland Traffic Ticket Defense</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f8; color: #1a1a1a; min-height: 100vh; }
+
+/* ── Stamp Logo ── */
+.stamp-logo {
+  display: inline-flex; flex-direction: column; align-items: center;
+  border: 3px solid #fff; border-radius: 5px; padding: 4px 12px;
+  position: relative; line-height: 1;
+}
+.stamp-logo::before {
+  content: ''; position: absolute; inset: 2px;
+  border: 1px dashed rgba(255,255,255,0.35); border-radius: 2px;
+}
+.stamp-logo .sl-top  { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.5em; letter-spacing: 3px; color: rgba(255,255,255,0.7); text-transform: uppercase; }
+.stamp-logo .sl-main { font-family: 'Anton', cursive; font-size: 1.4em; color: #fff; letter-spacing: 2px; }
+.stamp-logo .sl-bolt { color: #ffd700; }
+.stamp-logo .sl-sub  { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.48em; letter-spacing: 3px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+
+.stamp-logo-sm {
+  display: inline-flex; flex-direction: column; align-items: center;
+  border: 2px solid rgba(255,255,255,0.8); border-radius: 4px; padding: 2px 8px;
+  position: relative;
+}
+.stamp-logo-sm .sl-main { font-family: 'Anton', cursive; font-size: 1em; color: #fff; letter-spacing: 2px; }
+.stamp-logo-sm .sl-bolt { color: #ffd700; }
 
 /* ── Sticky phone bar ── */
 .sticky-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #cc0000; padding: 10px 20px; display: none; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
@@ -295,13 +319,19 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 <!-- Sticky phone bar (appears on scroll) -->
 <div class="sticky-bar" id="stickyBar">
-  <span class="sb-logo">⚖️ BEAT-TIX</span>
+  <div class="stamp-logo-sm">
+    <div class="sl-main">BEAT<span class="sl-bolt">⚡</span>TIX</div>
+  </div>
   <a href="tel:18558232849" class="sb-phone">📞 1-855-BEAT-TIX</a>
 </div>
 
 <!-- Header -->
 <div class="header">
-  <div class="logo">⚖️ BEAT<span>-TIX</span></div>
+  <div class="stamp-logo">
+    <div class="sl-top">Maryland</div>
+    <div class="sl-main">BEAT<span class="sl-bolt">⚡</span>TIX</div>
+    <div class="sl-sub">Traffic Defense</div>
+  </div>
   <a href="tel:18558232849" class="header-phone">📞 1-855-232-8849</a>
 </div>
 
