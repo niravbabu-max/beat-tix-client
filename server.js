@@ -8,38 +8,19 @@ app.use(express.static(path.join(__dirname)));
 const SCRAPFLY_BASE = 'https://api.scrapfly.io/scrape';
 const CASE_SEARCH_BASE = 'https://casesearch.courts.state.md.us/casesearch';
 
-const BROWSER_HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'en-US,en;q=0.9',
-  'Accept-Encoding': 'identity',
-};
 
-// ── Cookie helpers ────────────────────────────────────────────────────────────
-function mergeCookies(jar, cookies) {
-  for (const c of (cookies || [])) jar.set(c.name, c.value);
-}
-function cookieStr(jar) {
-  return Array.from(jar.entries()).map(([k, v]) => `${k}=${v}`).join('; ');
-}
-
-// ── ScrapFly GET ──────────────────────────────────────────────────────────────
-async function sfGet(apiKey, url, extraHeaders = {}) {
-  const params = new URLSearchParams({ key: apiKey, url, country: 'us', asp: 'true' });
-  for (const [k, v] of Object.entries(extraHeaders)) params.set(`headers[${k}]`, v);
-  const resp = await fetch(`${SCRAPFLY_BASE}?${params}`);
-  return resp.json();
-}
-
-// ── ScrapFly POST ─────────────────────────────────────────────────────────────
-async function sfPost(apiKey, url, body, extraHeaders = {}) {
-  const params = new URLSearchParams({ key: apiKey, url, country: 'us', asp: 'true' });
-  for (const [k, v] of Object.entries(extraHeaders)) params.set(`headers[${k}]`, v);
-  const resp = await fetch(`${SCRAPFLY_BASE}?${params}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body,
+// ── ScrapFly: full browser render with JS scenario ───────────────────────────
+async function sfRender(apiKey, url, scenario, waitMs = 4000) {
+  const params = new URLSearchParams({
+    key: apiKey,
+    url,
+    render_js: 'true',
+    asp: 'true',
+    country: 'us',
+    rendering_wait: String(waitMs),
+    js_scenario: JSON.stringify({ instructions: scenario }),
   });
+  const resp = await fetch(`${SCRAPFLY_BASE}?${params}`);
   return resp.json();
 }
 
@@ -197,81 +178,82 @@ app.post('/api/lookup-citation', async (req, res) => {
     return res.json({ found: false, error: 'Lookup service not available right now.' });
   }
 
-  const dbg = { steps: [] };
+  const dbg = {};
 
   try {
-    const jar = new Map();
+    // ── Single browser-rendered request — handles DataDome + form navigation ──
+    // ScrapFly render_js uses real headless Chrome, solving the DataDome challenge.
+    // js_scenario automates: accept disclaimer → fill case number → submit search.
+    const safeId = raw.replace(/'/g, "\\'");
 
-    // ── Step 1: Load disclaimer page ──────────────────────────────────────────
-    const s1 = await sfGet(apiKey, `${CASE_SEARCH_BASE}/`, BROWSER_HEADERS);
-    mergeCookies(jar, s1?.result?.cookies);
-    const s1text = stripHtml(s1?.result?.content || '').substring(0, 200);
-    dbg.steps.push({ step: 1, len: s1?.result?.content?.length || 0, cookies: jar.size, sample: s1text });
+    const scenario = [
+      // Wait for DataDome JS challenge to resolve and page to fully render
+      { wait: 3000 },
 
-    // ── Step 2: Accept disclaimer ─────────────────────────────────────────────
-    const s2 = await sfPost(
-      apiKey,
-      `${CASE_SEARCH_BASE}/processDisclaimer.jis`,
-      'disclaimer=Y&action=Continue',
-      { ...BROWSER_HEADERS, Cookie: cookieStr(jar), 'Content-Type': 'application/x-www-form-urlencoded', Referer: `${CASE_SEARCH_BASE}/` }
-    );
-    mergeCookies(jar, s2?.result?.cookies);
-    const s2text = stripHtml(s2?.result?.content || '').substring(0, 200);
-    dbg.steps.push({ step: 2, len: s2?.result?.content?.length || 0, cookies: jar.size, sample: s2text });
+      // Accept the disclaimer (try radio button + submit, or direct submit)
+      { evaluate: `(function(){
+          var r = document.querySelector('input[name="disclaimer"][value="Y"]');
+          if (r) { r.checked = true; }
+          var btn = document.querySelector('input[type="submit"], button[type="submit"], a[href*="Continue"]');
+          if (btn) btn.click();
+        })()` },
 
-    // ── Step 3: Search by case number ─────────────────────────────────────────
-    const searchBody = new URLSearchParams({
-      lastName: '', middleName: '', firstName: '', suffix: '', DOB: '',
-      address: '', city: '', state: '', zip: '',
-      court: '00', caseType: 'TR', status: 'A',
-      filingStart: '', filingEnd: '', nextStart: '0',
-      courtSystem: 'B', action: 'Search', caseId: raw,
-    });
+      // Wait for disclaimer navigation to complete
+      { wait: 4000 },
 
-    const s3 = await sfPost(
-      apiKey,
-      `${CASE_SEARCH_BASE}/inquirySearch.jis`,
-      searchBody.toString(),
-      { ...BROWSER_HEADERS, Cookie: cookieStr(jar), 'Content-Type': 'application/x-www-form-urlencoded', Referer: `${CASE_SEARCH_BASE}/inquirySearch.jis` }
-    );
-    mergeCookies(jar, s3?.result?.cookies);
-    let html = s3?.result?.content || '';
-    const s3text = stripHtml(html).substring(0, 300);
-    dbg.steps.push({ step: 3, len: html.length, cookies: jar.size, hasStatute: html.includes('Statute'), hasCase: html.includes('Case'), sample: s3text });
+      // Fill in the case/citation number and submit search form
+      { evaluate: `(function(){
+          var inp = document.querySelector('input[name="caseId"]') ||
+                    document.getElementById('caseId') ||
+                    document.querySelector('input[name*="case" i][type="text"]') ||
+                    document.querySelector('input[type="text"]');
+          if (inp) {
+            inp.value = '${safeId}';
+            var form = inp.closest ? inp.closest('form') : inp.form;
+            if (form) {
+              var sub = form.querySelector('input[type="submit"], button[type="submit"]');
+              if (sub) sub.click(); else form.submit();
+            }
+          }
+        })()` },
 
-    if (html.length < 500 || html.toLowerCase().includes('no cases found') || html.toLowerCase().includes('no records found')) {
-      return res.json({ found: false, error: 'No case found for that number. Try entering your charge manually below.', _dbg: dbg });
+      // Wait for search results to load
+      { wait: 6000 },
+
+      // If we got a results list (not yet on detail page), click first case link
+      { evaluate: `(function(){
+          var link = document.querySelector('a[href*="inquiryDetail"]');
+          if (link) link.click();
+        })()` },
+
+      // Wait for case detail page
+      { wait: 4000 },
+    ];
+
+    const result = await sfRender(apiKey, `${CASE_SEARCH_BASE}/`, scenario, 22000);
+    const html = result?.result?.content || '';
+    const text = stripHtml(html);
+
+    dbg.htmlLen = html.length;
+    dbg.url = result?.result?.url || '';
+    dbg.hasStatuteCode = html.includes('Statute Code') || html.includes('Statute');
+    dbg.sample = text.substring(0, 600);
+
+    if (html.length < 500 || text.toLowerCase().includes('no cases found')) {
+      return res.json({ found: false, error: 'No case found for that number. Try entering your charge manually.', _dbg: dbg });
     }
 
-    // ── Step 4: Follow detail link if search returned a list ─────────────────
-    const detailLinkMatch = html.match(/href="([^"]*inquiryDetail\.jis[^"]*)/i);
-    dbg.steps.push({ step: 4, detailLinkFound: !!detailLinkMatch, link: detailLinkMatch?.[1]?.substring(0, 100) });
-
-    if (detailLinkMatch) {
-      let detailUrl = detailLinkMatch[1].replace(/&amp;/g, '&');
-      if (!detailUrl.startsWith('http')) {
-        detailUrl = `https://casesearch.courts.state.md.us${detailUrl.startsWith('/') ? '' : '/casesearch/'}${detailUrl}`;
-      }
-      const s4 = await sfGet(apiKey, detailUrl, { ...BROWSER_HEADERS, Cookie: cookieStr(jar), Referer: `${CASE_SEARCH_BASE}/inquirySearch.jis` });
-      const s4html = s4?.result?.content || '';
-      dbg.steps.push({ step: '4b', len: s4html.length, hasStatute: s4html.includes('Statute'), sample: stripHtml(s4html).substring(0, 300) });
-      if (s4html.length > 500) html = s4html;
+    if (!dbg.hasStatuteCode) {
+      return res.json({ found: false, error: "Found your case but couldn't read the charges. Please enter your charge manually.", _dbg: dbg });
     }
 
-    // ── Parse results ─────────────────────────────────────────────────────────
     const charges = parseCharges(html);
     const courtDate = parseCourtDate(html);
     const county = parseCounty(html);
     dbg.chargesFound = charges.length;
-    dbg.hasStatuteCode = html.includes('Statute Code');
-    dbg.finalSample = stripHtml(html).substring(0, 500);
 
     if (charges.length === 0) {
-      return res.json({
-        found: false,
-        error: "Found your case but couldn't read the charges. Please enter your charge manually.",
-        _dbg: dbg,
-      });
+      return res.json({ found: false, error: "Found your case but couldn't read the charges. Please enter your charge manually.", _dbg: dbg });
     }
 
     return res.json({ found: true, charges, courtDate, county });
@@ -279,7 +261,7 @@ app.post('/api/lookup-citation', async (req, res) => {
   } catch (err) {
     console.error('[casesearch] Error:', err.message);
     dbg.error = err.message;
-    return res.json({ found: false, error: 'Lookup failed. Please enter your charge manually below.', _dbg: dbg });
+    return res.json({ found: false, error: 'Lookup failed. Please enter your charge manually.', _dbg: dbg });
   }
 });
 
