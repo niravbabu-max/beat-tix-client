@@ -1285,25 +1285,28 @@ function switchSearchTab(tab) {
 }
 
 function findCitationByStatute(statute, description) {
-  // Normalize: strip § and letter suffixes for comparison
-  const norm = s => s.replace(/§/g, '').replace(/\s+/g, '').toLowerCase().replace(/\([^)]+\)$/, '');
-  const base = norm(statute);
+  const normFull = s => s.replace(/§/g, '').replace(/\s+/g, '').toLowerCase();
+  const normBase = s => normFull(s).replace(/\([^)]+\)$/, '');
 
-  // Special handling for speeding (21-801.1) — use description to pick tier
+  const full = normFull(statute);
+  const base = normBase(statute);
+
+  // Special handling for speeding (21-801) — use description to pick tier
   if (base.includes('21-801')) {
     const d = (description || '').toLowerCase();
-    const nums = (d.match(/\d+/g) || []).map(Number);
+    const nums = (d.match(/\d+/g) || []).map(Number).filter(n => n < 100);
     const maxNum = nums.length ? Math.max(...nums) : 0;
     if (maxNum >= 26) return CITATIONS.find(c => c.name.includes('26–29'));
     if (maxNum >= 16) return CITATIONS.find(c => c.name.includes('16–25'));
     return CITATIONS.find(c => c.name.includes('1–15'));
   }
 
-  // Try exact statute match
-  return CITATIONS.find(c => {
-    const cs = norm(c.statute);
-    return cs === base || c.statute.replace(/§/g, '').replace(/\s+/g, '').toLowerCase().replace(/\([^)]+\)$/, '') === base;
-  }) || null;
+  // Try exact match including subsection first (e.g. 21-902(b) vs 21-902(a))
+  const exactMatch = CITATIONS.find(c => normFull(c.statute) === full);
+  if (exactMatch) return exactMatch;
+
+  // Fall back to base match (ignore subsection)
+  return CITATIONS.find(c => normBase(c.statute) === base) || null;
 }
 
 async function runLookup() {

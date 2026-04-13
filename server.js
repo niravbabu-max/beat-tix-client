@@ -59,43 +59,90 @@ function stripHtml(html) {
     .replace(/\s+/g, ' ').trim();
 }
 
+// Convert Maryland Case Search statute format "TA.21.902.B1.I" → "21-902(b)"
+function convertStatute(raw) {
+  if (!raw) return null;
+  raw = raw.trim();
+
+  // Handle "TA.XX.XXX..." format (standard Maryland Case Search format)
+  if (/^TA\./i.test(raw)) {
+    const parts = raw.split('.');
+    if (parts.length < 3) return null;
+    const title = parts[1];
+    let section = parts[2];
+    let subsection = '';
+
+    if (parts.length >= 4) {
+      const p3 = parts[3];
+      if (/^\d+$/.test(p3)) {
+        // Decimal part of section (e.g. 801.1)
+        section = section + '.' + p3;
+        if (parts.length >= 5) {
+          // Next part is subsection letter (e.g. "A", "B1")
+          subsection = parts[4].replace(/\d/g, '').charAt(0).toLowerCase();
+        }
+      } else {
+        // p3 is subsection letter (e.g. "A", "B1", "C")
+        subsection = p3.replace(/\d/g, '').charAt(0).toLowerCase();
+      }
+    }
+    const base = `${title}-${section}`;
+    return subsection ? `${base}(${subsection})` : base;
+  }
+
+  // Already in standard dash format (e.g. "21-801")
+  if (/^\d{2}-\d{3}/.test(raw)) return raw;
+
+  return null;
+}
+
 function parseCharges(html) {
   const charges = [];
   const seen = new Set();
-
-  // Pattern 1: statute in table cells — e.g. "21-801.1" or "TR21-801"
-  const cellRegex = /(\d{2}-\d{3,4}(?:\.\d+)?(?:\([a-zA-Z0-9]\))?)/g;
   const text = stripHtml(html);
 
-  // Pattern 2: look for charge rows in the raw HTML before stripping
-  // Maryland Case Search charge rows: statute code + description in adjacent cells
-  const tableRowRegex = /<tr[^>]*>[\s\S]*?<\/tr>/gi;
-  let rowMatch;
-  while ((rowMatch = tableRowRegex.exec(html)) !== null) {
-    const rowText = stripHtml(rowMatch[0]);
-    // Look for statute pattern in this row
-    const statuteMatch = rowText.match(/(\d{2}-\d{3,4}(?:\.\d+)?(?:\([a-zA-Z0-9]\))?)/);
-    if (statuteMatch) {
-      const statute = statuteMatch[1];
-      // Extract description from the row (everything after the statute that looks like a description)
-      const afterStatute = rowText.substring(rowText.indexOf(statute) + statute.length).trim();
-      const desc = afterStatute.replace(/^[\s\W]+/, '').substring(0, 120).trim();
-      if (!seen.has(statute)) {
-        seen.add(statute);
-        charges.push({ statute, description: desc });
+  // ── Primary: Maryland Case Search "Statute Code: TA.XX.XXX" format ──────────
+  // Pattern: "Statute Code: TA.21.902.B1.I Charge Description: DRIVING VEH..."
+  const pairs = text.matchAll(/Statute Code:\s*([\w.]+)\s*Charge Description:\s*([A-Z][A-Z0-9\s\-\/\.\(\)]{2,80}?)(?=\s+[A-Z][a-z]|\s*$)/g);
+  for (const m of pairs) {
+    const statute = convertStatute(m[1]);
+    const desc = m[2].trim();
+    if (statute && !seen.has(statute)) {
+      seen.add(statute);
+      charges.push({ statute, description: desc, rawStatute: m[1] });
+    }
+  }
+
+  // ── Fallback A: separate Statute Code and Description lines ─────────────────
+  if (charges.length === 0) {
+    const statutes = [...text.matchAll(/Statute Code:\s*([\w.]+)/g)].map(m => convertStatute(m[1])).filter(Boolean);
+    const descs = [...text.matchAll(/Charge Description:\s*([A-Z][A-Z0-9\s\-\/\.]{2,80}?)(?=\s+[A-Z][a-z]|\s*$)/g)].map(m => m[1].trim());
+    for (let i = 0; i < statutes.length; i++) {
+      if (!seen.has(statutes[i])) {
+        seen.add(statutes[i]);
+        charges.push({ statute: statutes[i], description: descs[i] || '' });
       }
     }
   }
 
-  // Fallback: just find all statute numbers in the full text
+  // ── Fallback B: look for raw TA. codes anywhere in text ─────────────────────
   if (charges.length === 0) {
-    let m;
-    while ((m = cellRegex.exec(text)) !== null) {
-      const statute = m[1];
-      if (!seen.has(statute) && !statute.startsWith('00-') && !statute.startsWith('19-')) {
-        // Skip obvious non-traffic statutes (19- is MD Rules)
+    for (const m of text.matchAll(/TA\.(\d{2}\.\d{3,4}[.\w]*)/gi)) {
+      const statute = convertStatute('TA.' + m[1]);
+      if (statute && !seen.has(statute)) {
         seen.add(statute);
         charges.push({ statute, description: '' });
+      }
+    }
+  }
+
+  // ── Fallback C: plain statute numbers (21-801, 16-303, etc.) ────────────────
+  if (charges.length === 0) {
+    for (const m of text.matchAll(/(\d{2}-\d{3,4}(?:\.\d+)?(?:\([a-zA-Z0-9]\))?)/g)) {
+      const s = m[1];
+      if (!seen.has(s) && !s.startsWith('00-') && !s.startsWith('19-')) {
+        seen.add(s);
+        charges.push({ statute: s, description: '' });
       }
     }
   }
