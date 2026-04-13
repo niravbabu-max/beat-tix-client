@@ -1334,7 +1334,7 @@ async function runLookup() {
     if (!data.found) {
       if (data._debug) console.log('[beat-tix lookup debug]\n', data._debug);
       status.className = 'lookup-status error';
-      const debugSnippet = data._debug ? `<details style="margin-top:8px;font-size:0.75em;"><summary style="cursor:pointer;color:#999;">Debug info (tap to expand)</summary><pre style="white-space:pre-wrap;word-break:break-all;font-size:0.9em;color:#555;max-height:200px;overflow:auto;">${data._debug.substring(0,1500)}</pre></details>` : '';
+      const debugSnippet = data._dbg ? `<details style="margin-top:8px;font-size:0.75em;"><summary style="cursor:pointer;color:#999;">Debug info (tap to expand)</summary><pre style="white-space:pre-wrap;word-break:break-all;font-size:0.85em;color:#333;background:#f5f5f5;padding:8px;border-radius:6px;max-height:300px;overflow:auto;">${JSON.stringify(data._dbg, null, 2)}</pre></details>` : '';
       status.innerHTML = `❌ ${data.error || 'Not found.'} <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>${debugSnippet}`;
       btn.disabled = false;
       btn.textContent = 'Look Up';
