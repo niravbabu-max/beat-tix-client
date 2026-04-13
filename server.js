@@ -9,17 +9,85 @@ const SCRAPFLY_BASE = 'https://api.scrapfly.io/scrape';
 const CASE_SEARCH_BASE = 'https://casesearch.courts.state.md.us/casesearch';
 
 
-// ── ScrapFly: basic render (no JS scenario) ───────────────────────────────────
-async function sfRender(apiKey, url, scenario, waitMs = 4000) {
+// ── Build the browser JS that navigates Maryland Case Search ─────────────────
+function buildSearchJs(citationNumber) {
+  return `
+// Step 1: Click I Agree
+const buttons = document.querySelectorAll('button');
+for (const btn of buttons) {
+  if (btn.textContent.trim().includes('Agree')) { btn.click(); break; }
+}
+await new Promise(r => setTimeout(r, 5000));
+
+// Step 2: Click Case Number tab
+const tabs = document.querySelectorAll('[role="tab"], button');
+for (const tab of tabs) {
+  if (tab.textContent.includes('Case Number')) { tab.click(); break; }
+}
+await new Promise(r => setTimeout(r, 2000));
+
+// Step 3: Fill in citation number
+const allInputs = document.querySelectorAll('input');
+let caseInput = null;
+for (const inp of allInputs) {
+  const parent = inp.closest('div');
+  const labels = parent ? parent.querySelectorAll('label, span') : [];
+  for (const lbl of labels) {
+    if (lbl.textContent.includes('Case Number')) { caseInput = inp; break; }
+  }
+  if (caseInput) break;
+}
+if (!caseInput) {
+  for (const inp of allInputs) {
+    if ((inp.type === 'text' || !inp.type) && inp.offsetParent !== null) {
+      caseInput = inp; break;
+    }
+  }
+}
+if (caseInput) {
+  caseInput.focus();
+  const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+  setter.call(caseInput, '${citationNumber}');
+  caseInput.dispatchEvent(new Event('input', {bubbles: true}));
+  caseInput.dispatchEvent(new Event('change', {bubbles: true}));
+}
+await new Promise(r => setTimeout(r, 1000));
+
+// Step 4: Click Search
+const searchBtns = document.querySelectorAll('button');
+for (const btn of searchBtns) {
+  if (btn.textContent.trim() === 'Search' && btn.offsetParent !== null) {
+    btn.click(); break;
+  }
+}
+
+// Step 5: Wait for results then click first case
+await new Promise(r => setTimeout(r, 8000));
+const caseLinks = document.querySelectorAll('a[href*="inquiry"], table a, [role="row"] a');
+if (caseLinks.length > 0) {
+  caseLinks[0].click();
+  await new Promise(r => setTimeout(r, 4000));
+}
+`;
+}
+
+// ── ScrapFly: residential proxy + JS execution ────────────────────────────────
+async function sfRender(apiKey, citationNumber) {
+  const jsCode = buildSearchJs(citationNumber);
+  const jsB64 = Buffer.from(jsCode).toString('base64url');
+
   const params = new URLSearchParams({
     key: apiKey,
-    url,
-    render_js: 'true',
+    url: CASE_SEARCH_URL,
     asp: 'true',
+    render_js: 'true',
+    rendering_wait: '5000',
     country: 'us',
-    wait: String(waitMs),
+    proxy_pool: 'public_residential_pool',
+    js: jsB64,
   });
-  const resp = await fetch(`${SCRAPFLY_BASE}?${params}`);
+
+  const resp = await fetch(`${SCRAPFLY_BASE}?${params}`, { timeout: 120000 });
   return resp.json();
 }
 
@@ -229,9 +297,16 @@ app.post('/api/lookup-citation', async (req, res) => {
       { wait: 4000 },
     ];
 
-    const result = await sfRender(apiKey, `${CASE_SEARCH_BASE}/`, scenario, 8000);
+    const result = await sfRender(apiKey, raw);
     const html = result?.result?.content || '';
-    const text = stripHtml(html);
+
+    // Strip script/style before text extraction (mirrors defense-snapshot approach)
+    const text = html
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
 
     dbg.htmlLen = html.length;
     dbg.url = result?.result?.url || '';
