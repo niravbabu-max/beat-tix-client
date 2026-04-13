@@ -78,7 +78,7 @@ async function sfRender(apiKey, citationNumber) {
 
   const params = new URLSearchParams({
     key: apiKey,
-    url: CASE_SEARCH_URL,
+    url: CASE_SEARCH_BASE + '/',
     asp: 'true',
     render_js: 'true',
     rendering_wait: '5000',
@@ -87,7 +87,9 @@ async function sfRender(apiKey, citationNumber) {
     js: jsB64,
   });
 
-  const resp = await fetch(`${SCRAPFLY_BASE}?${params}`, { timeout: 120000 });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 120000);
+  const resp = await fetch(`${SCRAPFLY_BASE}?${params}`, { signal: controller.signal }).finally(() => clearTimeout(timer));
   return resp.json();
 }
 
