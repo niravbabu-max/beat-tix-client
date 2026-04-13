@@ -1458,8 +1458,10 @@ async function runLookup() {
     if (data.county) window._lookupCounty = data.county;
 
     if (matched === 0) {
+      const rawStatutes = data.charges.map(c => `${c.statute} (${c.description || 'no desc'})`).join(' | ');
+      console.log('[beat-tix] unmatched statutes:', rawStatutes);
       status.className = 'lookup-status error';
-      status.innerHTML = `⚠️ Found your case but couldn't match the charges. <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
+      status.innerHTML = `⚠️ Found your case but couldn't match the charges.<br><small style="color:#888;">Statutes returned: ${rawStatutes}</small><br><a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
     } else {
       const chargeNames = data.charges.map(c => c.statute + (c.description ? ' — ' + c.description.substring(0, 40) : '')).join('<br>');
       status.className = 'lookup-status success';
