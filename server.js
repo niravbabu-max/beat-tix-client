@@ -9,7 +9,7 @@ const SCRAPFLY_BASE = 'https://api.scrapfly.io/scrape';
 const CASE_SEARCH_BASE = 'https://casesearch.courts.state.md.us/casesearch';
 
 
-// ── ScrapFly: full browser render with JS scenario ───────────────────────────
+// ── ScrapFly: basic render (no JS scenario) ───────────────────────────────────
 async function sfRender(apiKey, url, scenario, waitMs = 4000) {
   const params = new URLSearchParams({
     key: apiKey,
@@ -17,8 +17,7 @@ async function sfRender(apiKey, url, scenario, waitMs = 4000) {
     render_js: 'true',
     asp: 'true',
     country: 'us',
-    rendering_wait: String(waitMs),
-    js_scenario: JSON.stringify({ instructions: scenario }),
+    wait: String(waitMs),
   });
   const resp = await fetch(`${SCRAPFLY_BASE}?${params}`);
   return resp.json();
@@ -230,12 +229,16 @@ app.post('/api/lookup-citation', async (req, res) => {
       { wait: 4000 },
     ];
 
-    const result = await sfRender(apiKey, `${CASE_SEARCH_BASE}/`, scenario, 22000);
+    const result = await sfRender(apiKey, `${CASE_SEARCH_BASE}/`, scenario, 8000);
     const html = result?.result?.content || '';
     const text = stripHtml(html);
 
     dbg.htmlLen = html.length;
     dbg.url = result?.result?.url || '';
+    dbg.resultKeys = Object.keys(result || {});
+    dbg.innerKeys = Object.keys(result?.result || {});
+    dbg.scrapflyError = result?.error || result?.result?.error || null;
+    dbg.httpStatus = result?.result?.status_code || null;
     dbg.hasStatuteCode = html.includes('Statute Code') || html.includes('Statute');
     dbg.sample = text.substring(0, 600);
 
