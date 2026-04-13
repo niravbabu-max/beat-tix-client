@@ -1329,6 +1329,8 @@ async function runLookup() {
     const data = await resp.json();
 
     if (!data.found) {
+      // Log debug HTML if available so we can fix the parser
+      if (data._debug) console.log('[beat-tix lookup debug]\n', data._debug);
       status.className = 'lookup-status error';
       status.innerHTML = `❌ ${data.error || 'Not found.'} <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
       btn.disabled = false;

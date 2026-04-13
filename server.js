@@ -229,9 +229,13 @@ app.post('/api/lookup-citation', async (req, res) => {
     console.log('[casesearch] charges:', charges.length, '| courtDate:', courtDate, '| county:', county);
 
     if (charges.length === 0) {
+      // Return stripped text for debugging so we can see the actual structure
+      const debugText = stripHtml(html).substring(0, 3000);
+      console.log('[casesearch] DEBUG - stripped text sample:\n', debugText);
       return res.json({
         found: false,
         error: "Found your case but couldn't read the charges. Please enter your charge manually.",
+        _debug: debugText,
       });
     }
 
