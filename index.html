@@ -314,6 +314,24 @@ input:checked + .slider:before { transform: translateX(20px); }
   .cta-phone { font-size: 1.1em; padding: 12px 20px; }
 }
 
+/* ── Citation Lookup Tabs ── */
+.search-tabs { display:flex; gap:0; margin-bottom:14px; border:1.5px solid #e5e5e5; border-radius:10px; overflow:hidden; }
+.search-tab { flex:1; padding:10px 8px; text-align:center; font-size:0.78em; font-weight:700; color:#888; cursor:pointer; background:#f9f9f9; border:none; transition:all 0.15s; }
+.search-tab.active { background:#cc0000; color:#fff; }
+.search-panel { display:none; }
+.search-panel.active { display:block; }
+.lookup-wrap { display:flex; gap:8px; }
+.lookup-input { flex:1; background:#f5f5f5; border:1.5px solid #ddd; border-radius:8px; padding:12px 14px; font-size:0.9em; color:#1a1a1a; outline:none; font-family:inherit; }
+.lookup-input:focus { border-color:#cc0000; background:#fff; }
+.lookup-btn { background:#cc0000; color:#fff; border:none; border-radius:8px; padding:12px 16px; font-size:0.85em; font-weight:800; cursor:pointer; white-space:nowrap; }
+.lookup-btn:hover { background:#aa0000; }
+.lookup-btn:disabled { background:#ccc; cursor:not-allowed; }
+.lookup-status { margin-top:10px; font-size:0.82em; border-radius:8px; padding:10px 14px; display:none; }
+.lookup-status.loading { display:block; background:#f0f9ff; color:#0369a1; }
+.lookup-status.error { display:block; background:#fef2f2; color:#b91c1c; }
+.lookup-status.success { display:block; background:#f0fdf4; color:#15803d; font-weight:600; }
+.lookup-found-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+
 /* ── Hire Now Button ── */
 .hire-btn { width:100%; background:#16a34a; color:#fff; border:none; border-radius:12px; padding:16px; font-size:1.05em; font-weight:800; cursor:pointer; margin-bottom:12px; display:none; letter-spacing:0.3px; }
 .hire-btn:hover { background:#15803d; }
@@ -508,10 +526,30 @@ input:checked + .slider:before { transform: translateX(20px); }
 
   <div class="search-card">
     <label>What are you charged with?</label>
-    <p class="hint">Type your violation — e.g. "speeding", "reckless", "cell phone", "suspended"</p>
-    <div class="search-wrap">
-      <input type="text" id="citationSearch" placeholder="Start typing your charge..." autocomplete="off">
-      <div id="dropdown"></div>
+
+    <!-- Tabs -->
+    <div class="search-tabs" style="margin-top:10px;">
+      <button class="search-tab active" id="tabManual" onclick="switchSearchTab('manual')">🔍 Type your charge</button>
+      <button class="search-tab" id="tabLookup" onclick="switchSearchTab('lookup')">📋 Look up by citation #</button>
+    </div>
+
+    <!-- Panel: Manual search -->
+    <div class="search-panel active" id="panelManual">
+      <p class="hint">Type your violation — e.g. "speeding", "reckless", "cell phone", "suspended"</p>
+      <div class="search-wrap">
+        <input type="text" id="citationSearch" placeholder="Start typing your charge..." autocomplete="off">
+        <div id="dropdown"></div>
+      </div>
+    </div>
+
+    <!-- Panel: Citation number lookup -->
+    <div class="search-panel" id="panelLookup">
+      <p class="hint">Enter your case or citation number exactly as it appears on your ticket or court notice — we'll look it up automatically.</p>
+      <div class="lookup-wrap">
+        <input type="text" class="lookup-input" id="lookupInput" placeholder="e.g. D-01-TR-25-001234" autocomplete="off" onkeydown="if(event.key==='Enter')runLookup()">
+        <button class="lookup-btn" id="lookupBtn" onclick="runLookup()">Look Up</button>
+      </div>
+      <div class="lookup-status" id="lookupStatus"></div>
     </div>
   </div>
 
@@ -1237,6 +1275,107 @@ function submitReminder() {
   document.getElementById('reminderSuccess').classList.add('show');
 }
 
+// ── CITATION LOOKUP ───────────────────────────────────────────────────────────
+function switchSearchTab(tab) {
+  document.getElementById('tabManual').classList.toggle('active', tab === 'manual');
+  document.getElementById('tabLookup').classList.toggle('active', tab === 'lookup');
+  document.getElementById('panelManual').classList.toggle('active', tab === 'manual');
+  document.getElementById('panelLookup').classList.toggle('active', tab === 'lookup');
+  if (tab === 'lookup') document.getElementById('lookupInput').focus();
+}
+
+function findCitationByStatute(statute, description) {
+  // Normalize: strip § and letter suffixes for comparison
+  const norm = s => s.replace(/§/g, '').replace(/\s+/g, '').toLowerCase().replace(/\([^)]+\)$/, '');
+  const base = norm(statute);
+
+  // Special handling for speeding (21-801.1) — use description to pick tier
+  if (base.includes('21-801')) {
+    const d = (description || '').toLowerCase();
+    const nums = (d.match(/\d+/g) || []).map(Number);
+    const maxNum = nums.length ? Math.max(...nums) : 0;
+    if (maxNum >= 26) return CITATIONS.find(c => c.name.includes('26–29'));
+    if (maxNum >= 16) return CITATIONS.find(c => c.name.includes('16–25'));
+    return CITATIONS.find(c => c.name.includes('1–15'));
+  }
+
+  // Try exact statute match
+  return CITATIONS.find(c => {
+    const cs = norm(c.statute);
+    return cs === base || c.statute.replace(/§/g, '').replace(/\s+/g, '').toLowerCase().replace(/\([^)]+\)$/, '') === base;
+  }) || null;
+}
+
+async function runLookup() {
+  const input = document.getElementById('lookupInput');
+  const btn = document.getElementById('lookupBtn');
+  const status = document.getElementById('lookupStatus');
+  const val = input.value.trim();
+
+  if (!val) { input.focus(); return; }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Looking up...';
+  status.className = 'lookup-status loading';
+  status.textContent = '🔍 Searching Maryland Case Search — this takes a few seconds...';
+  status.style.display = 'block';
+
+  try {
+    const resp = await fetch('/api/lookup-citation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ citationNumber: val }),
+    });
+    const data = await resp.json();
+
+    if (!data.found) {
+      status.className = 'lookup-status error';
+      status.innerHTML = `❌ ${data.error || 'Not found.'} <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
+      btn.disabled = false;
+      btn.textContent = 'Look Up';
+      return;
+    }
+
+    // Map returned charges to our CITATIONS array
+    let matched = 0;
+    for (const c of data.charges) {
+      const citation = findCitationByStatute(c.statute, c.description);
+      if (citation && !addedCitations.find(a => a.statute === citation.statute && a.name === citation.name)) {
+        addedCitations.push({ ...citation });
+        matched++;
+      }
+    }
+
+    // Auto-fill court date if returned and not already set
+    if (data.courtDate && !document.getElementById('courtDate').value) {
+      document.getElementById('courtDate').value = data.courtDate;
+    }
+
+    // Auto-fill county in checkout modal (store for later)
+    if (data.county) window._lookupCounty = data.county;
+
+    if (matched === 0) {
+      status.className = 'lookup-status error';
+      status.innerHTML = `⚠️ Found your case but couldn't match the charges. <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
+    } else {
+      const chargeNames = data.charges.map(c => c.statute + (c.description ? ' — ' + c.description.substring(0, 40) : '')).join('<br>');
+      status.className = 'lookup-status success';
+      status.innerHTML = `✅ Found your case! Added ${matched} charge${matched !== 1 ? 's' : ''} to the calculator.<br><span style="font-size:0.85em;font-weight:400;color:#555;">${chargeNames}</span>`;
+      renderCitations();
+      updateContext();
+      // Scroll to results
+      setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+    }
+
+  } catch (err) {
+    status.className = 'lookup-status error';
+    status.innerHTML = `❌ Lookup failed. <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Look Up';
+}
+
 // ── CHECKOUT FLOW ─────────────────────────────────────────────────────────────
 let checkoutFee = 0;
 let checkoutCharges = [];
@@ -1250,6 +1389,17 @@ function openCheckout() {
   // Pre-fill court date from calculator if set
   const calcDate = document.getElementById('courtDate').value;
   if (calcDate) document.getElementById('co_courtDate').value = calcDate;
+
+  // Pre-fill county from citation lookup if available
+  if (window._lookupCounty) {
+    const countySelect = document.getElementById('co_county');
+    for (const opt of countySelect.options) {
+      if (opt.value === window._lookupCounty || opt.text === window._lookupCounty) {
+        countySelect.value = opt.value;
+        break;
+      }
+    }
+  }
 
   // Pre-fill charges preview
   const chargeNames = checkoutCharges.map(c => c.name).join(', ') || 'Traffic citation(s)';
