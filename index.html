@@ -544,12 +544,24 @@ input:checked + .slider:before { transform: translateX(20px); }
 
     <!-- Panel: Citation number lookup -->
     <div class="search-panel" id="panelLookup">
-      <p class="hint">Enter your case or citation number exactly as it appears on your ticket or court notice — we'll look it up automatically.</p>
+      <p class="hint">Enter your case or citation number and we'll try to look it up — or paste your case details directly below.</p>
       <div class="lookup-wrap">
-        <input type="text" class="lookup-input" id="lookupInput" placeholder="e.g. D-01-TR-25-001234" autocomplete="off" onkeydown="if(event.key==='Enter')runLookup()">
+        <input type="text" class="lookup-input" id="lookupInput" placeholder="e.g. 2W90ZJ1 or D-01-TR-25-001234" autocomplete="off" onkeydown="if(event.key==='Enter')runLookup()">
         <button class="lookup-btn" id="lookupBtn" onclick="runLookup()">Look Up</button>
       </div>
       <div class="lookup-status" id="lookupStatus"></div>
+
+      <!-- Paste fallback — shown when lookup fails -->
+      <div id="pasteFallback" style="display:none;margin-top:14px;border-top:1px solid #eee;padding-top:14px;">
+        <p style="font-size:0.8em;color:#555;margin-bottom:10px;">
+          <strong>Or paste your case details:</strong><br>
+          <a href="https://casesearch.courts.state.md.us/casesearch/" target="_blank" style="color:#cc0000;font-weight:700;">Open Maryland Case Search ↗</a>
+          — search for your case, select it, then copy all the text on the page and paste it below.
+        </p>
+        <textarea id="pasteInput" placeholder="Paste the full case detail text here..." style="width:100%;height:120px;border:1.5px solid #ddd;border-radius:8px;padding:10px;font-size:0.82em;font-family:inherit;resize:vertical;box-sizing:border-box;outline:none;"></textarea>
+        <button onclick="parsePastedCase()" style="width:100%;background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:12px;font-size:0.88em;font-weight:800;cursor:pointer;margin-top:8px;">📋 Read My Case Details →</button>
+        <div id="pasteStatus" style="margin-top:8px;font-size:0.82em;display:none;border-radius:8px;padding:10px 14px;"></div>
+      </div>
     </div>
   </div>
 
@@ -1282,6 +1294,93 @@ function switchSearchTab(tab) {
   document.getElementById('panelManual').classList.toggle('active', tab === 'manual');
   document.getElementById('panelLookup').classList.toggle('active', tab === 'lookup');
   if (tab === 'lookup') document.getElementById('lookupInput').focus();
+  if (tab === 'manual') {
+    document.getElementById('pasteFallback').style.display = 'none';
+    document.getElementById('lookupStatus').className = 'lookup-status';
+  }
+}
+
+// Convert "TA.21.902.B1.I" → "21-902(b)" (client-side, mirrors server logic)
+function convertStatuteClient(raw) {
+  if (!raw) return null;
+  raw = raw.trim();
+  if (/^TA\./i.test(raw)) {
+    const parts = raw.split('.');
+    if (parts.length < 3) return null;
+    const title = parts[1], sec = parts[2];
+    let section = sec, sub = '';
+    if (parts.length >= 4) {
+      const p3 = parts[3];
+      if (/^\d+$/.test(p3)) {
+        section = sec + '.' + p3;
+        if (parts.length >= 5) sub = parts[4].replace(/\d/g, '').charAt(0).toLowerCase();
+      } else {
+        sub = p3.replace(/\d/g, '').charAt(0).toLowerCase();
+      }
+    }
+    return sub ? `${title}-${section}(${sub})` : `${title}-${section}`;
+  }
+  if (/^\d{2}-\d{3}/.test(raw)) return raw;
+  return null;
+}
+
+// Parse pasted case detail text (plain text from Maryland Case Search)
+function parsePastedCase() {
+  const text = document.getElementById('pasteInput').value.trim();
+  const statusEl = document.getElementById('pasteStatus');
+  if (!text || text.length < 50) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = '#fef2f2';
+    statusEl.style.color = '#b91c1c';
+    statusEl.textContent = 'Please paste your case details first.';
+    return;
+  }
+
+  // Extract statute + description pairs
+  const pairs = [...text.matchAll(/Statute Code:\s*([\w.]+)\s*Charge Description:\s*([A-Z][A-Z0-9\s\-\/\.\(\):]{2,100}?)(?=\s{2,}|Offense Date|Speed Limit|Location|Probable|Charge Number|Docket|Officer|Vehicle|Mandatory|$)/g)];
+
+  // Fallback: just statute codes
+  const statutes = pairs.length > 0 ? pairs.map(m => ({ raw: m[1], desc: m[2].trim() }))
+    : [...text.matchAll(/Statute Code:\s*([\w.]+)/g)].map(m => ({ raw: m[1], desc: '' }));
+
+  let matched = 0;
+  const notFound = [];
+  for (const { raw, desc } of statutes) {
+    const statute = convertStatuteClient(raw);
+    if (!statute) continue;
+    const citation = findCitationByStatute(statute, desc);
+    if (citation && !addedCitations.find(a => a.name === citation.name)) {
+      addedCitations.push({ ...citation });
+      matched++;
+    } else if (!citation) {
+      notFound.push(raw);
+    }
+  }
+
+  // Also try to extract court date
+  const dateMatch = text.match(/(?:Event Date|Hearing|Trial)\s+(\d{1,2}\/\d{1,2}\/\d{4})/i);
+  if (dateMatch && !document.getElementById('courtDate').value) {
+    const parts = dateMatch[1].split('/');
+    document.getElementById('courtDate').value = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
+  }
+
+  // Extract county
+  const countyMatch = text.match(/Violation County:\s*([^\n]+County)/i) || text.match(/District Court For ([^\n]+County)/i);
+  if (countyMatch) window._lookupCounty = countyMatch[1].replace(/\s*-\s*Traffic.*$/i,'').trim();
+
+  statusEl.style.display = 'block';
+  if (matched > 0) {
+    statusEl.style.background = '#f0fdf4';
+    statusEl.style.color = '#15803d';
+    statusEl.innerHTML = `✅ Found ${matched} charge${matched !== 1 ? 's' : ''}! Scroll down to see your quote.`;
+    renderCitations();
+    updateContext();
+    setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+  } else {
+    statusEl.style.background = '#fef2f2';
+    statusEl.style.color = '#b91c1c';
+    statusEl.innerHTML = `❌ Couldn't read charges from that text. Try the manual search tab instead.${notFound.length ? ' (Statutes: ' + notFound.join(', ') + ')' : ''}`;
+  }
 }
 
 function findCitationByStatute(statute, description) {
@@ -1332,10 +1431,9 @@ async function runLookup() {
     const data = await resp.json();
 
     if (!data.found) {
-      if (data._debug) console.log('[beat-tix lookup debug]\n', data._debug);
       status.className = 'lookup-status error';
-      const debugSnippet = data._dbg ? `<details style="margin-top:8px;font-size:0.75em;"><summary style="cursor:pointer;color:#999;">Debug info (tap to expand)</summary><pre style="white-space:pre-wrap;word-break:break-all;font-size:0.85em;color:#333;background:#f5f5f5;padding:8px;border-radius:6px;max-height:300px;overflow:auto;">${JSON.stringify(data._dbg, null, 2)}</pre></details>` : '';
-      status.innerHTML = `❌ ${data.error || 'Not found.'} <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>${debugSnippet}`;
+      status.innerHTML = `❌ Automatic lookup unavailable right now. Use the paste option below — it takes 30 seconds.`;
+      document.getElementById('pasteFallback').style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Look Up';
       return;
@@ -1374,7 +1472,8 @@ async function runLookup() {
 
   } catch (err) {
     status.className = 'lookup-status error';
-    status.innerHTML = `❌ Lookup failed. <a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
+    status.innerHTML = `❌ Lookup failed. Use the paste option below.`;
+    document.getElementById('pasteFallback').style.display = 'block';
   }
 
   btn.disabled = false;
