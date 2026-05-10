@@ -279,7 +279,6 @@ input:checked + .slider:before { transform: translateX(20px); }
 .reminder-success { display: none; font-size: 0.85em; color: #16a34a; font-weight: 600; margin-top: 8px; }
 .reminder-success.show { display: block; }
 
-/* ── WhatsApp float ── */
 /* ── Guarantee ── */
 .guarantee-section { background: #111; padding: 40px 20px; text-align: center; }
 .guarantee-badge { display: inline-flex; flex-direction: column; align-items: center; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 3px solid #f59e0b; border-radius: 20px; padding: 30px 36px; max-width: 540px; margin: 0 auto; }
@@ -407,7 +406,6 @@ input:checked + .slider:before { transform: translateX(20px); }
 <!-- Hero Split -->
 <div class="hero-split" id="heroTop">
   <div class="hero-inner">
-    <!-- Left: headline + bullets -->
     <div class="hero-left">
       <h1>That ticket is going to cost you a lot more than <span>you think.</span></h1>
       <ul class="hero-bullets">
@@ -526,14 +524,10 @@ input:checked + .slider:before { transform: translateX(20px); }
 
   <div class="search-card">
     <label>What are you charged with?</label>
-
-    <!-- Tabs -->
     <div class="search-tabs" style="margin-top:10px;">
       <button class="search-tab active" id="tabManual" onclick="switchSearchTab('manual')">🔍 Type your charge</button>
       <button class="search-tab" id="tabLookup" onclick="switchSearchTab('lookup')">📋 Look up by citation #</button>
     </div>
-
-    <!-- Panel: Manual search -->
     <div class="search-panel active" id="panelManual">
       <p class="hint">Type your violation — e.g. "speeding", "reckless", "cell phone", "suspended"</p>
       <div class="search-wrap">
@@ -541,8 +535,6 @@ input:checked + .slider:before { transform: translateX(20px); }
         <div id="dropdown"></div>
       </div>
     </div>
-
-    <!-- Panel: Citation number lookup -->
     <div class="search-panel" id="panelLookup">
       <p class="hint">Enter your case or citation number and we'll try to look it up — or paste your case details directly below.</p>
       <div class="lookup-wrap">
@@ -550,8 +542,6 @@ input:checked + .slider:before { transform: translateX(20px); }
         <button class="lookup-btn" id="lookupBtn" onclick="runLookup()">Look Up</button>
       </div>
       <div class="lookup-status" id="lookupStatus"></div>
-
-      <!-- Paste fallback — shown when lookup fails -->
       <div id="pasteFallback" style="display:none;margin-top:14px;border-top:1px solid #eee;padding-top:14px;">
         <p style="font-size:0.8em;color:#555;margin-bottom:10px;">
           <strong>Or paste your case details:</strong><br>
@@ -944,6 +934,8 @@ input:checked + .slider:before { transform: translateX(20px); }
 </div>
 
 <script>
+const ZAPIER_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/19452664/4yrrnb5/';
+
 // ── CITATIONS DATA ────────────────────────────────────────────────────────────
 const CITATIONS = [
   { name:"Speeding 1–9 mph over",   statute:"§21-801", points:1, tier:1, fee:400,  jail:false, fine:80  },
@@ -1163,12 +1155,9 @@ function updateResults() {
     <div class="fin-item"><div class="fi-name">Wisetack</div><div class="fi-terms">Up to 12 months</div><div class="fi-mo">${fmt(m12)}/mo</div></div>
   `;
 
-  // Track current fee + charges globally for checkout modal
   window._currentFee = attyFee;
   window._currentCharges = [...addedCitations];
 
-  // Show "Hire Us Now" buttons only for standard billable cases
-  // Hide for: serious charges (DUI etc), pure consult-only, or no fee
   const showHireBtn = attyFee > 0 && !hasSerious && !(hasConsult && billable.length === 0);
   const hireLabel = `✅ Hire Us Now — Pay $${attyFee.toLocaleString()} Online<span class="hire-btn-sub">Skip the phone call · Flat fee · Takes 3 minutes</span>`;
 
@@ -1256,26 +1245,54 @@ window.addEventListener('scroll', function() {
   }
 });
 
-// ── HERO FORM ─────────────────────────────────────────────────────────────────
+// ── HERO FORM — posts to Zapier ───────────────────────────────────────────────
 function submitHeroForm() {
   const name = document.getElementById('hf_name').value.trim();
   const phone = document.getElementById('hf_phone').value.trim();
   const type = document.getElementById('hf_type').value;
-  if (!name || !phone || !type) { alert('Please fill in your name, phone number, and violation type.'); return; }
-  // TODO: POST to GHL webhook
-  // fetch('YOUR_GHL_WEBHOOK_URL', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, phone, violationType: type, source:'hero_form'}) });
+  if (!name || !phone || !type) {
+    alert('Please fill in your name, phone number, and violation type.');
+    return;
+  }
+
+  fetch(ZAPIER_WEBHOOK, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name,
+      phone: phone,
+      violationType: type,
+      source: 'hero_form'
+    })
+  }).catch(err => console.error('Zapier hero form error:', err));
+
   document.getElementById('heroFormInner').style.display = 'none';
   document.getElementById('heroFormSuccess').classList.add('show');
 }
 
-// ── LEAD FORM ─────────────────────────────────────────────────────────────────
+// ── LEAD FORM — posts to Zapier ───────────────────────────────────────────────
 function submitLead() {
   const name = document.getElementById('lf_name').value.trim();
   const phone = document.getElementById('lf_phone').value.trim();
   const type = document.getElementById('lf_type').value;
-  if (!name || !phone || !type) { alert('Please fill in your name, phone number, and violation type.'); return; }
-  // TODO: POST to GHL webhook or Formspree endpoint
-  // fetch('YOUR_GHL_WEBHOOK_URL', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name,phone,email:document.getElementById('lf_email').value,date:document.getElementById('lf_date').value,type,county:document.getElementById('lf_county').value,notes:document.getElementById('lf_notes').value}) });
+  if (!name || !phone || !type) {
+    alert('Please fill in your name, phone number, and violation type.');
+    return;
+  }
+
+  fetch(ZAPIER_WEBHOOK, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name,
+      phone: phone,
+      email: document.getElementById('lf_email').value.trim(),
+      courtDate: document.getElementById('lf_date').value,
+      violationType: type,
+      county: document.getElementById('lf_county').value,
+      notes: document.getElementById('lf_notes').value.trim(),
+      source: 'lead_form'
+    })
+  }).catch(err => console.error('Zapier lead form error:', err));
+
   document.getElementById('leadForm').style.display = 'none';
   document.getElementById('formSuccess').classList.add('show');
 }
@@ -1285,7 +1302,6 @@ function submitReminder() {
   const phone = document.getElementById('reminderPhone').value.trim();
   const date = document.getElementById('reminderDate').value;
   if (!phone || !date) { alert('Please enter your phone number and court date.'); return; }
-  // TODO: connect to SMS reminder service / GHL workflow
   document.getElementById('reminderSuccess').classList.add('show');
 }
 
@@ -1302,7 +1318,6 @@ function switchSearchTab(tab) {
   }
 }
 
-// Convert "TA.21.902.B1.I" → "21-902(b)" (client-side, mirrors server logic)
 function convertStatuteClient(raw) {
   if (!raw) return null;
   raw = raw.trim();
@@ -1326,7 +1341,6 @@ function convertStatuteClient(raw) {
   return null;
 }
 
-// Parse pasted case detail text (plain text from Maryland Case Search)
 function parsePastedCase() {
   const text = document.getElementById('pasteInput').value.trim();
   const statusEl = document.getElementById('pasteStatus');
@@ -1338,10 +1352,7 @@ function parsePastedCase() {
     return;
   }
 
-  // Extract statute + description pairs
   const pairs = [...text.matchAll(/Statute Code:\s*([\w.]+)\s*Charge Description:\s*([A-Z][A-Z0-9\s\-\/\.\(\):]{2,100}?)(?=\s{2,}|Offense Date|Speed Limit|Location|Probable|Charge Number|Docket|Officer|Vehicle|Mandatory|$)/g)];
-
-  // Fallback: just statute codes
   const statutes = pairs.length > 0 ? pairs.map(m => ({ raw: m[1], desc: m[2].trim() }))
     : [...text.matchAll(/Statute Code:\s*([\w.]+)/g)].map(m => ({ raw: m[1], desc: '' }));
 
@@ -1359,14 +1370,12 @@ function parsePastedCase() {
     }
   }
 
-  // Also try to extract court date
   const dateMatch = text.match(/(?:Event Date|Hearing|Trial)\s+(\d{1,2}\/\d{1,2}\/\d{4})/i);
   if (dateMatch && !document.getElementById('courtDate').value) {
     const parts = dateMatch[1].split('/');
     document.getElementById('courtDate').value = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
   }
 
-  // Extract county
   const countyMatch = text.match(/Violation County:\s*([^\n]+County)/i) || text.match(/District Court For ([^\n]+County)/i);
   if (countyMatch) window._lookupCounty = countyMatch[1].replace(/\s*-\s*Traffic.*$/i,'').trim();
 
@@ -1388,11 +1397,9 @@ function parsePastedCase() {
 function findCitationByStatute(statute, description) {
   const normFull = s => s.replace(/§/g, '').replace(/\s+/g, '').toLowerCase();
   const normBase = s => normFull(s).replace(/\([^)]+\)$/, '');
-
   const full = normFull(statute);
   const base = normBase(statute);
 
-  // Special handling for speeding (21-801) — use description to pick tier
   if (base.includes('21-801')) {
     const d = (description || '').toLowerCase();
     const nums = (d.match(/\d+/g) || []).map(Number).filter(n => n < 100);
@@ -1402,11 +1409,8 @@ function findCitationByStatute(statute, description) {
     return CITATIONS.find(c => c.name.includes('1–15'));
   }
 
-  // Try exact match including subsection first (e.g. 21-902(b) vs 21-902(a))
   const exactMatch = CITATIONS.find(c => normFull(c.statute) === full);
   if (exactMatch) return exactMatch;
-
-  // Fall back to base match (ignore subsection)
   return CITATIONS.find(c => normBase(c.statute) === base) || null;
 }
 
@@ -1441,7 +1445,6 @@ async function runLookup() {
       return;
     }
 
-    // Map returned charges to our CITATIONS array
     let matched = 0;
     for (const c of data.charges) {
       const citation = findCitationByStatute(c.statute, c.description);
@@ -1451,17 +1454,13 @@ async function runLookup() {
       }
     }
 
-    // Auto-fill court date if returned and not already set
     if (data.courtDate && !document.getElementById('courtDate').value) {
       document.getElementById('courtDate').value = data.courtDate;
     }
-
-    // Auto-fill county in checkout modal (store for later)
     if (data.county) window._lookupCounty = data.county;
 
     if (matched === 0) {
       const rawStatutes = data.charges.map(c => `${c.statute} (${c.description || 'no desc'})`).join(' | ');
-      console.log('[beat-tix] unmatched statutes:', rawStatutes);
       status.className = 'lookup-status error';
       status.innerHTML = `⚠️ Found your case but couldn't match the charges.<br><small style="color:#888;">Statutes returned: ${rawStatutes}</small><br><a href="#" onclick="switchSearchTab('manual');return false;" style="color:#cc0000;font-weight:700;">Search manually →</a>`;
     } else {
@@ -1470,7 +1469,6 @@ async function runLookup() {
       status.innerHTML = `✅ Found your case! Added ${matched} charge${matched !== 1 ? 's' : ''} to the calculator.<br><span style="font-size:0.85em;font-weight:400;color:#555;">${chargeNames}</span>`;
       renderCitations();
       updateContext();
-      // Scroll to results
       setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
     }
 
@@ -1494,11 +1492,9 @@ function openCheckout() {
   checkoutCharges = window._currentCharges || [];
   checkoutStep = 1;
 
-  // Pre-fill court date from calculator if set
   const calcDate = document.getElementById('courtDate').value;
   if (calcDate) document.getElementById('co_courtDate').value = calcDate;
 
-  // Pre-fill county from citation lookup if available
   if (window._lookupCounty) {
     const countySelect = document.getElementById('co_county');
     for (const opt of countySelect.options) {
@@ -1509,19 +1505,13 @@ function openCheckout() {
     }
   }
 
-  // Pre-fill charges preview
   const chargeNames = checkoutCharges.map(c => c.name).join(', ') || 'Traffic citation(s)';
   document.getElementById('co_chargesPreview').textContent = '📋 Charges: ' + chargeNames;
   document.getElementById('co_chargesPreview2').textContent = '📋 Charges: ' + chargeNames;
-
-  // Set fee display
   document.getElementById('co_headerFee').textContent = '$' + checkoutFee.toLocaleString();
   document.getElementById('co_payAmount').textContent = '$' + checkoutFee.toLocaleString();
 
-  // Build engagement letter
   buildAgreementText();
-
-  // Reset tabs and steps
   setCoStep(1);
 
   document.getElementById('coOverlay').classList.add('open');
@@ -1547,14 +1537,12 @@ function coStep1Next() {
   const name = document.getElementById('co_name').value.trim();
   const phone = document.getElementById('co_phone').value.trim();
   const email = document.getElementById('co_email').value.trim();
-  const citation = document.getElementById('co_citation').value.trim();
   const county = document.getElementById('co_county').value;
   const courtDate = document.getElementById('co_courtDate').value;
   if (!name || !phone || !email || !county || !courtDate) {
     alert('Please fill in all required fields before continuing.');
     return;
   }
-  // Rebuild agreement with filled-in details
   buildAgreementText();
   setCoStep(2);
 }
@@ -1592,8 +1580,6 @@ function buildAgreementText() {
 }
 
 function coOpenLawPay() {
-  // TODO: Replace YOUR_LAWPAY_PAGE_URL with your LawPay payment page link
-  // Example: https://secure.lawpay.com/pages/innovatelawfirm/operating
   const lawPayUrl = 'YOUR_LAWPAY_PAGE_URL';
   if (lawPayUrl === 'YOUR_LAWPAY_PAGE_URL') {
     alert('Online payment is coming soon. Please call 1-855-BEAT-TIX to complete your payment over the phone.');
@@ -1624,7 +1610,6 @@ function coOpenLawPay() {
       <div class="co-tab" id="co_tab3">③ Payment</div>
     </div>
 
-    <!-- Step 1: Intake -->
     <div class="co-body">
       <div class="co-step active" id="co_step1">
         <div class="co-step-label">Step 1 of 3 — Tell us about yourself</div>
@@ -1670,7 +1655,6 @@ function coOpenLawPay() {
         <button class="co-btn" onclick="coStep1Next()">Continue to Agreement →</button>
       </div>
 
-      <!-- Step 2: Fee Agreement -->
       <div class="co-step" id="co_step2">
         <div class="co-step-label">Step 2 of 3 — Review and sign your fee agreement</div>
         <div class="co-charges-preview" id="co_chargesPreview2"></div>
@@ -1687,7 +1671,6 @@ function coOpenLawPay() {
         <button class="co-btn co-btn-back" onclick="setCoStep(1)">← Back</button>
       </div>
 
-      <!-- Step 3: Payment -->
       <div class="co-step" id="co_step3">
         <div class="co-step-label">Step 3 of 3 — Complete your payment</div>
         <div class="co-pay-box">
