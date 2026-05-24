@@ -268,16 +268,6 @@ input:checked + .slider:before { transform: translateX(20px); }
 .form-success p { font-size: 0.88em; color: #555; line-height: 1.6; }
 
 /* ── Reminder widget ── */
-.reminder-wrap { background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px; }
-.reminder-wrap h3 { font-size: 0.95em; font-weight: 800; color: #0369a1; margin-bottom: 6px; }
-.reminder-wrap p { font-size: 0.82em; color: #0c4a6e; margin-bottom: 14px; line-height: 1.5; }
-.reminder-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.reminder-row input { flex: 1; min-width: 180px; background: #fff; border: 1.5px solid #bae6fd; border-radius: 8px; padding: 10px 12px; font-size: 0.9em; outline: none; color: #1a1a1a; }
-.reminder-row input:focus { border-color: #0369a1; }
-.reminder-btn { background: #0369a1; color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-size: 0.88em; font-weight: 700; cursor: pointer; white-space: nowrap; }
-.reminder-btn:hover { background: #0284c7; }
-.reminder-success { display: none; font-size: 0.85em; color: #16a34a; font-weight: 600; margin-top: 8px; }
-.reminder-success.show { display: block; }
 
 /* ── WhatsApp float ── */
 /* ── Guarantee ── */
@@ -914,22 +904,6 @@ input:checked + .slider:before { transform: translateX(20px); }
   </div>
 </div>
 
-<div class="divider"></div>
-
-<!-- Court Date Reminder -->
-<div class="section">
-  <div class="reminder-wrap">
-    <h3>⏰ Get a Free Court Date Reminder</h3>
-    <p>Miss your court date and a warrant gets issued automatically. Enter your phone and court date and we'll text you a reminder — no strings attached.</p>
-    <div class="reminder-row">
-      <input type="tel" id="reminderPhone" placeholder="Your phone number">
-      <input type="date" id="reminderDate">
-      <button class="reminder-btn" onclick="submitReminder()">Send Reminder</button>
-    </div>
-    <div class="reminder-success" id="reminderSuccess">✓ Done! We'll text you before your court date.</div>
-  </div>
-</div>
-
 <p class="disclaimer">* "You Never Go to Court" applies to standard traffic cases. Incarcerable offenses and DUI/criminal charges may require your appearance. Results not guaranteed; prior results do not guarantee similar outcomes. Insurance estimates based on Maryland average premiums and industry actuarial data — individual results vary. BEAT-TIX is a service of Innovate Law Firm LLC. Attorney advertising. This tool is for informational purposes only and does not constitute legal advice. Innovate Law Firm LLC is licensed in the State of Maryland. Money-back guarantee applies to standard flat-fee traffic cases only; refund issued if outcome is not better than paying the citation in full. This site is owned and operated by Innovate Law Firm LLC.</p>
 
 <!-- WhatsApp Float -->
@@ -1278,15 +1252,6 @@ function submitLead() {
   // fetch('YOUR_GHL_WEBHOOK_URL', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name,phone,email:document.getElementById('lf_email').value,date:document.getElementById('lf_date').value,type,county:document.getElementById('lf_county').value,notes:document.getElementById('lf_notes').value}) });
   document.getElementById('leadForm').style.display = 'none';
   document.getElementById('formSuccess').classList.add('show');
-}
-
-// ── REMINDER ──────────────────────────────────────────────────────────────────
-function submitReminder() {
-  const phone = document.getElementById('reminderPhone').value.trim();
-  const date = document.getElementById('reminderDate').value;
-  if (!phone || !date) { alert('Please enter your phone number and court date.'); return; }
-  // TODO: connect to SMS reminder service / GHL workflow
-  document.getElementById('reminderSuccess').classList.add('show');
 }
 
 // ── CITATION LOOKUP ───────────────────────────────────────────────────────────
