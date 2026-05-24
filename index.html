@@ -1063,8 +1063,8 @@ function updateResults() {
   let attyFee = 0;
   if (billable.length > 0) {
     const highestFee = Math.max(...billable.map(c => c.fee + (c.jail ? JAIL_SURCHARGE : 0)));
-    const extra = Math.max(0, billable.length - 3);
-    attyFee = highestFee + (extra * 100) + (isCDL ? 300 : 0) + (isOOS ? 200 : 0);
+    const multiCiteSurcharge = billable.length > 3 ? 200 : 0;
+    attyFee = highestFee + multiCiteSurcharge + (isCDL ? 300 : 0) + (isOOS ? 200 : 0);
   }
 
   const insRate = getInsRate(totalPts);
