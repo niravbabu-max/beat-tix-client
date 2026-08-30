@@ -1237,7 +1237,7 @@ function submitHeroForm() {
   const type = document.getElementById('hf_type').value;
   if (!name || !phone || !type) { alert('Please fill in your name, phone number, and violation type.'); return; }
   // TODO: POST to GHL webhook
-  // fetch('YOUR_GHL_WEBHOOK_URL', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, phone, violationType: type, source:'hero_form'}) });
+  // fetch('https://hooks.zapier.com/hooks/catch/19452664/4yrrnb5/', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, phone, violationType: type, source:'hero_form'}) });
   document.getElementById('heroFormInner').style.display = 'none';
   document.getElementById('heroFormSuccess').classList.add('show');
 }
